@@ -1,0 +1,1 @@
+WordPress uses its native user system automatically. Tickets are linked to WordPress user IDs -- no changes to your user model are required. Guest ticket support is available for unauthenticated users via secure access tokens.

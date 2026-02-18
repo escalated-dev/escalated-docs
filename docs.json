@@ -1,0 +1,142 @@
+{
+    "sections": [
+        {
+            "slug": "getting-started",
+            "label": "Getting Started",
+            "anchor": "getting-started",
+            "type": "single"
+        },
+        {
+            "slug": "installation",
+            "label": "Installation",
+            "anchor": "installation",
+            "type": "tabbed"
+        },
+        {
+            "slug": "frontend-setup",
+            "label": "Frontend Setup",
+            "anchor": "frontend-setup",
+            "type": "single"
+        },
+        {
+            "slug": "theming",
+            "label": "Theming",
+            "anchor": "theming",
+            "type": "single"
+        },
+        {
+            "slug": "user-model",
+            "label": "User Model",
+            "anchor": "user-model",
+            "type": "tabbed"
+        },
+        {
+            "slug": "authorization",
+            "label": "Authorization",
+            "anchor": "authorization",
+            "type": "tabbed"
+        },
+        {
+            "slug": "configuration",
+            "label": "Configuration",
+            "anchor": "configuration",
+            "type": "single"
+        },
+        {
+            "slug": "routes",
+            "label": "Routes",
+            "anchor": "routes",
+            "type": "single"
+        },
+        {
+            "slug": "tickets",
+            "label": "Tickets",
+            "anchor": "tickets",
+            "type": "single"
+        },
+        {
+            "slug": "bulk-actions",
+            "label": "Bulk Actions",
+            "anchor": "bulk-actions",
+            "type": "single"
+        },
+        {
+            "slug": "conversations",
+            "label": "Conversations",
+            "anchor": "conversations",
+            "type": "single"
+        },
+        {
+            "slug": "statuses",
+            "label": "Statuses & Priorities",
+            "anchor": "statuses",
+            "type": "single"
+        },
+        {
+            "slug": "slas",
+            "label": "SLAs & Escalation",
+            "anchor": "slas",
+            "type": "single"
+        },
+        {
+            "slug": "macros",
+            "label": "Macros",
+            "anchor": "macros",
+            "type": "single"
+        },
+        {
+            "slug": "followers",
+            "label": "Followers",
+            "anchor": "followers",
+            "type": "single"
+        },
+        {
+            "slug": "satisfaction",
+            "label": "Satisfaction Ratings",
+            "anchor": "satisfaction",
+            "type": "single"
+        },
+        {
+            "slug": "collaboration",
+            "label": "Collaboration",
+            "anchor": "collaboration",
+            "type": "single"
+        },
+        {
+            "slug": "keyboard-shortcuts",
+            "label": "Keyboard Shortcuts",
+            "anchor": "keyboard-shortcuts",
+            "type": "single"
+        },
+        {
+            "slug": "events",
+            "label": "Events",
+            "anchor": "events",
+            "type": "tabbed"
+        },
+        {
+            "slug": "scheduling",
+            "label": "Scheduling",
+            "anchor": "scheduling",
+            "type": "single"
+        },
+        {
+            "slug": "notifications",
+            "label": "Notifications",
+            "anchor": "notifications",
+            "type": "single"
+        },
+        {
+            "slug": "inbound-email",
+            "label": "Inbound Email",
+            "anchor": "inbound-email",
+            "type": "tabbed"
+        },
+        {
+            "slug": "contributing",
+            "label": "Contributing",
+            "anchor": "contributing",
+            "type": "single"
+        }
+    ]
+}
