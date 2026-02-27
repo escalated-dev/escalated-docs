@@ -22,3 +22,5 @@ Escalated treats tickets as state machines. Status transitions are enforced and 
 - Critical
 
 Transitions are configurable via `config/escalated.php` under the `transitions` key.
+
+Admins can create and manage custom statuses in the admin panel (`/support/admin/statuses`).

@@ -13,6 +13,21 @@ Escalated works out of the box with sensible defaults. Configuration is optional
 > - `sla.business_hours_only` -- Only count business hours for SLA targets (default: `false`)
 > - `notifications.channels` -- Notification channels (default: `['mail', 'database']`)
 
+## Admin settings and modules
+
+Recent platform updates add configuration and management screens for:
+
+- Custom fields with conditional visibility rules
+- Custom statuses and business hours schedules
+- Roles (RBAC), skills-based routing, and agent capacity
+- Audit log review
+- Automations and outbound webhooks
+- CSAT survey behavior
+- SSO and two-factor authentication
+- Data retention policies and purge behavior
+- Email channel settings
+- Custom objects and records
+
 ## Publishing assets
 
 ```bash
