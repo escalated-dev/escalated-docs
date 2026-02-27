@@ -14,3 +14,4 @@ Collect feedback from customers after a ticket is resolved. A simple 5-star rati
 
 - Read-only rating displayed in the ticket sidebar
 - CSAT metrics in the admin reports dashboard: average score, total ratings, and breakdown by star level
+- Dedicated CSAT settings page for tuning survey behavior and collection defaults

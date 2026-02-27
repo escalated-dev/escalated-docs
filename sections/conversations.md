@@ -9,3 +9,4 @@ Each ticket contains a threaded conversation between the requester and support a
 > - File attachments on replies (configurable size and count limits)
 > - Canned responses for common agent replies
 > - Pinnable internal notes -- pin important notes to the top of the ticket for quick reference
+> - Side conversations for collaborators outside the main requester thread
