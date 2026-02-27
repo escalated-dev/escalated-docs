@@ -7,6 +7,12 @@
             "type": "single"
         },
         {
+            "slug": "platform-parity",
+            "label": "Platform Parity Features",
+            "anchor": "platform-parity",
+            "type": "single"
+        },
+        {
             "slug": "installation",
             "label": "Installation",
             "anchor": "installation",
