@@ -1,0 +1,1 @@
+WordPress yerel kullanıcı sistemini otomatik olarak kullanır. Biletler WordPress kullanıcı kimliklerine bağlanır -- kullanıcı modelinizde değişiklik yapmanız gerekmez. Kimliği doğrulanmamış kullanıcılar için güvenli erişim belirteçleri aracılığıyla misafir bilet desteği mevcuttur.

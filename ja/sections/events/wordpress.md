@@ -1,0 +1,1 @@
+イベントはWordPressのアクションフック経由でディスパッチされます。`add_action('escalated_ticket_created', $callback)`を使用してチケットライフサイクルイベントをリッスンしてください。

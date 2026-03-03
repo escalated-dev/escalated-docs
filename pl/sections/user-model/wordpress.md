@@ -1,0 +1,1 @@
+WordPress automatycznie korzysta z natywnego systemu użytkowników. Zgłoszenia są powiązane z identyfikatorami użytkowników WordPress -- nie są wymagane żadne zmiany w modelu użytkownika. Obsługa zgłoszeń gości jest dostępna dla nieuwierzytelnionych użytkowników za pomocą bezpiecznych tokenów dostępu.

@@ -1,0 +1,1 @@
+WordPress gebruikt automatisch zijn eigen gebruikerssysteem. Tickets worden gekoppeld aan WordPress-gebruikers-ID's -- er zijn geen wijzigingen aan je gebruikersmodel nodig. Gastticketondersteuning is beschikbaar voor niet-geauthenticeerde gebruikers via beveiligde toegangstokens.

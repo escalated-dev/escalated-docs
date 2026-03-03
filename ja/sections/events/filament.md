@@ -1,0 +1,1 @@
+Filamentは`escalated-laravel`と同じLaravelイベントを使用します。標準のLaravelパッケージとまったく同じ方法でリッスンできます。

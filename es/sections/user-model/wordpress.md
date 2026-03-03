@@ -1,0 +1,1 @@
+WordPress utiliza su sistema nativo de usuarios automaticamente. Los tickets se vinculan a los IDs de usuario de WordPress -- no se requieren cambios en tu modelo de usuario. El soporte para tickets de invitados esta disponible para usuarios no autenticados mediante tokens de acceso seguros.

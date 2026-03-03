@@ -1,0 +1,1 @@
+WordPress verwendet sein natives Benutzersystem automatisch. Tickets werden mit WordPress-Benutzer-IDs verknüpft -- keine Änderungen an Ihrem User Model erforderlich. Gast-Ticket-Unterstützung ist für nicht authentifizierte Benutzer über sichere Zugangstokens verfügbar.

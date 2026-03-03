@@ -1,0 +1,1 @@
+WordPress utilizza il suo sistema utente nativo automaticamente. I ticket sono collegati agli ID utente WordPress -- non sono necessarie modifiche al tuo modello utente. Il supporto per i ticket guest è disponibile per gli utenti non autenticati tramite token di accesso sicuri.

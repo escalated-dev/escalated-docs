@@ -1,0 +1,8 @@
+Definieren Sie Callables in Ihren Einstellungen:
+
+```python
+ESCALATED = {
+    "ADMIN_CHECK": lambda user: user.is_staff,
+    "AGENT_CHECK": lambda user: hasattr(user, "is_agent") and user.is_agent,
+}
+```

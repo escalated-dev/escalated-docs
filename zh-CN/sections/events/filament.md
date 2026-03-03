@@ -1,0 +1,1 @@
+Filament使用与`escalated-laravel`相同的Laravel事件。监听方式与标准Laravel包完全相同。
