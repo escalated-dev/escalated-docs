@@ -133,6 +133,12 @@
             "type": "tabbed"
         },
         {
+            "slug": "importing",
+            "label": "Importing Data",
+            "anchor": "importing",
+            "type": "tabbed"
+        },
+        {
             "slug": "contributing",
             "label": "Contributing",
             "anchor": "contributing",
