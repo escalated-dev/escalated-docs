@@ -143,6 +143,12 @@
             "label": "Contributing",
             "anchor": "contributing",
             "type": "single"
+        },
+        {
+            "slug": "plugin-development",
+            "label": "Plugin Development",
+            "anchor": "plugin-development",
+            "type": "tabbed"
         }
     ]
 }
