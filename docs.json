@@ -149,6 +149,12 @@
             "label": "Plugin Development",
             "anchor": "plugin-development",
             "type": "tabbed"
+        },
+        {
+            "slug": "compare",
+            "label": "Compare",
+            "anchor": "compare",
+            "type": "tabbed"
         }
     ]
 }
