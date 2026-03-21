@@ -85,6 +85,12 @@
             "type": "single"
         },
         {
+            "slug": "automations",
+            "label": "Automations",
+            "anchor": "automations",
+            "type": "single"
+        },
+        {
             "slug": "followers",
             "label": "Followers",
             "anchor": "followers",
