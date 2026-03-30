@@ -145,6 +145,30 @@
             "type": "tabbed"
         },
         {
+            "slug": "sso",
+            "label": "Single Sign-On",
+            "anchor": "sso",
+            "type": "single"
+        },
+        {
+            "slug": "rest-api",
+            "label": "REST API",
+            "anchor": "rest-api",
+            "type": "single"
+        },
+        {
+            "slug": "commands",
+            "label": "Management Commands",
+            "anchor": "commands",
+            "type": "single"
+        },
+        {
+            "slug": "mobile-sdks",
+            "label": "Mobile SDKs",
+            "anchor": "mobile-sdks",
+            "type": "single"
+        },
+        {
             "slug": "contributing",
             "label": "Contributing",
             "anchor": "contributing",
