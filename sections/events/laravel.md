@@ -6,6 +6,8 @@ Event::listen(TicketCreated::class, function ($event) {
 });
 ```
 
+> Events work in both UI-enabled and headless modes.
+
 **Available events**
 
 - `TicketCreated` -- New ticket submitted

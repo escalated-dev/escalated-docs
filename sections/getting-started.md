@@ -2,6 +2,8 @@
 
 Escalated is an open-source, embeddable support ticket system with a shared Inertia.js UI. Install the backend adapter for your framework, add the npm package for the frontend, and you're ready to go.
 
+> **Headless mode** -- Escalated can also run without the built-in UI, providing only the backend API, events, and commands. See [Configuration](configuration.md) for details.
+
 ## Core capabilities
 
 - Full ticket lifecycle: create, assign, reply, resolve, close, reopen

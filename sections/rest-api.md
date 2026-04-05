@@ -2,6 +2,8 @@
 
 Escalated includes a full REST API for programmatic access to tickets, agents, departments, and more.
 
+> **Headless mode** -- The REST API works independently of the UI setting and is fully functional in headless deployments. It is the recommended interface for building custom frontends.
+
 ## Authentication
 
 All API requests require a Bearer token in the `Authorization` header:

@@ -20,3 +20,16 @@ Rails.application.routes.draw do
   mount Escalated::Engine, at: "/support"
 end
 ```
+
+## Headless mode (optional)
+
+To run Escalated without the built-in Inertia UI:
+
+```ruby
+# config/initializers/escalated.rb
+Escalated.configure do |config|
+  config.ui_enabled = false
+end
+```
+
+API routes, Rake tasks, ActiveSupport notifications, and the plugin runtime continue to work normally.
