@@ -45,6 +45,7 @@ When the UI is disabled:
 > - **Laravel** -- set `ESCALATED_UI_ENABLED=false` in `.env` or `'ui' => ['enabled' => false]` in `config/escalated.php`
 > - **Django** -- set `"UI_ENABLED": False` in your `ESCALATED` settings dict
 > - **Rails** -- set `config.escalated.ui_enabled = false` in your initializer
+> - **AdonisJS** -- set `ESCALATED_UI_ENABLED=false` in `.env` or `ui: { enabled: false }` in `config/escalated.ts`
 > - **Filament** -- the Filament plugin is UI-only by design; disable it by removing the plugin from your panel provider. The underlying `escalated-laravel` package continues to provide core functionality.
 
 ### Custom rendering
@@ -77,6 +78,14 @@ ESCALATED = {
 Escalated.configure do |config|
   config.ui_renderer = MyApp::ErbRenderer.new
 end
+```
+
+**AdonisJS**
+
+```typescript
+// The renderer is resolved via getRenderer() from @escalated-dev/escalated-adonis
+// To provide a custom renderer, implement the RendererContract interface
+import { RendererContract } from '@escalated-dev/escalated-adonis'
 ```
 
 ## Publishing assets

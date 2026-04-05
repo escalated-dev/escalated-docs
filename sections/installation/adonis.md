@@ -17,3 +17,13 @@ $ node ace migration:run
 ```
 
 > **Note:** The configure command publishes `config/escalated.ts`, registers the provider, and copies migrations automatically.
+
+## Headless mode (optional)
+
+To run Escalated without the built-in Inertia UI, set this in your `.env`:
+
+```
+ESCALATED_UI_ENABLED=false
+```
+
+API routes, management commands, events, and the plugin runtime continue to work normally.
