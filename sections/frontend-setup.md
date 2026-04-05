@@ -1,5 +1,7 @@
 # Frontend Setup
 
+> **Note:** Frontend setup is only required when the built-in UI is enabled (`ui.enabled = true`, the default). If you are running Escalated in headless mode, skip this section entirely.
+
 Escalated ships a shared Inertia.js + Vue 3 UI as an npm package. All frameworks use the same frontend.
 
 ## 1. Install the npm package

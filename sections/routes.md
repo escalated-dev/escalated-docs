@@ -2,6 +2,8 @@
 
 Escalated registers three groups of routes under the configured prefix (default: `/support`).
 
+> **Note:** The routes listed below are only registered when the UI is enabled. In headless mode (`ui.enabled = false`), only API routes, inbound email webhooks, and plugin endpoints are available.
+
 ## Customer routes
 
 | Method | URL | Description |

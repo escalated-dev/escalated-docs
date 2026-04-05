@@ -2,6 +2,8 @@
 
 Each backend framework includes CLI commands for operations, maintenance, and setup.
 
+> Management commands work regardless of the UI setting. All commands listed below function normally in headless mode.
+
 ## Setup
 
 ### install
