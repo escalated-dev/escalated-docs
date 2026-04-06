@@ -1,5 +1,7 @@
 # Escalated Documentation
 
+[![Docs](https://img.shields.io/badge/docs-escalated.dev-blue)](https://escalated.dev/docs)
+
 This repository contains the documentation for [Escalated](https://escalated.dev), an open-source embeddable support ticket system.
 
 The Markdown files in this repo are fetched at runtime by the Escalated marketing site and rendered as the [/docs](https://escalated.dev/docs) page.
