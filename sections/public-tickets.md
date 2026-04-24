@@ -93,7 +93,9 @@ Place the widget snippet on any page. Config is read from `data-*` attributes on
 
 Only `data-base-url` is required; `data-color` (hex, defaults to indigo `#4F46E5`) and `data-position` (`bottom-right` | `bottom-left`, defaults to `bottom-right`) are optional. The widget mounts itself into a shadow-DOM host so host-app CSS can't leak in.
 
-On open, the widget optionally fetches `/support/widget/config` (host-framework-dependent — some plugins implement this to serve admin-configured branding overrides, others fall back to the `data-*` attributes) and renders a ticket form collecting `email` (required), `name` (optional), `subject`, `description`, and an optional `priority`. On submit it POSTs to the host framework's widget tickets endpoint (`/escalated/widget/tickets` on NestJS; `/support/widget/tickets` on Laravel/Rails/Django/etc.).
+**For NestJS backends, add one more attribute:** `data-widget-path="/escalated/widget"`. The NestJS reference mounts its WidgetController at `/escalated/widget` (not `/support/widget` like every other host adapter), so embedders need to tell the shared widget which prefix to use. Every non-NestJS backend works with the default and doesn't need this attribute.
+
+On open, the widget optionally fetches `<widget-path>/config` (host-framework-dependent — some plugins implement this to serve admin-configured branding overrides, others fall back to the `data-*` attributes) and renders a ticket form collecting `email` (required), `name` (optional), `subject`, `description`, and an optional `priority`. On submit it POSTs to `<widget-path>/tickets` on the host framework.
 
 Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottleGuard`. Requests exceeding the limit get a `429` and no ticket is created.
 
