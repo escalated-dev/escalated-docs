@@ -231,8 +231,8 @@ The `delay` action and any other deferred behaviors depend on the application sc
 |---|---|
 | "When a ticket is created, do X" | Workflow (`ticket.created`) |
 | "Every 15 minutes, check all pending tickets and close > 7 days" | Automation |
-| "When an agent replies, send a webhook" | Workflow (`reply.created` with a condition filtering out customer-authored replies) |
+| "When *any* reply is added, send a webhook" | Workflow (`reply.created`) — note the event fires with the TICKET as payload, not the reply, so you can't filter by `author_type` in conditions; the webhook receives the ticket and your downstream handler decides |
 | "Nightly: add the `stale` tag to tickets idle > 72h" | Automation |
-| "When a VIP submits, wait 5 min then escalate if still open" | Workflow (`ticket.created` + `delay`) |
+| "When a high-priority ticket is created, wait 5 min then leave an escalation note" | Workflow (`ticket.created` + priority condition + `delay`) |
 
 Workflows are reactive and surgical. Automations are periodic and sweeping. Both can coexist on the same ticket; they read and write the same tables.
