@@ -139,7 +139,12 @@ The deferred-job queue retains rows after completion (status flips from `pending
 }
 ```
 
-The full ticket entity is passed through as `data.ticket` — relationships present on the in-memory entity at dispatch time (tags, department) are included. Delivery follows the same HMAC-SHA256 signing + retry rules as every other Escalated webhook: the `X-Escalated-Signature` header carries `sha256=<hex>` of the payload body signed with the webhook's configured secret. Delivery failures are recorded on `WebhookDelivery` for the retry scheduler to pick up; they do not block subsequent actions in the same workflow.
+The full ticket entity is passed through as `data.ticket` — relationships present on the in-memory entity at dispatch time (tags, department) are included. Delivery follows the same HMAC-SHA256 signing + retry rules as every other Escalated webhook. Each request carries two headers:
+
+- `X-Escalated-Signature`: the hex-encoded HMAC-SHA256 of the raw payload body, using the webhook's configured secret. Verify on your side by recomputing `hex(hmac_sha256(secret, body))` and comparing with a timing-safe equality check.
+- `X-Escalated-Event`: the event name (`workflow.triggered` for this action; other events use their own names).
+
+Delivery failures are recorded on `WebhookDelivery` for the retry scheduler to pick up; they do not block subsequent actions in the same workflow.
 
 ## Example workflows
 
