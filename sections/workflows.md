@@ -26,25 +26,37 @@ When an event fires, Escalated dispatches it to the workflow engine, which looks
 
 A workflow subscribes to exactly one trigger event. For rules that should react to multiple events, define a workflow per event.
 
-Fine-grained event subtypes (priority changed, tagged, reopened, SLA warnings, inbound received, signup invites) all fire on the Escalated event bus too, but today they are not bridged into the Workflow runner — they are consumed by the built-in email + activity log listeners instead. Conditions like "priority equals high" or "has tag vip" let you filter the five event types above to approximate per-subtype behavior.
+Fine-grained event subtypes (priority changed, tagged, reopened, SLA warnings, inbound received, signup invites) all fire on the Escalated event bus too, but today they are not bridged into the Workflow runner — they are consumed by the built-in email + activity-log listeners instead. Use the five events above combined with per-field conditions to approximate per-subtype behavior.
 
 ## Conditions
 
-Workflow conditions evaluate the ticket (and relevant context) at the moment the event fires. All conditions must match:
+A condition is a `{ field, operator, value }` triple. `field` names any top-level ticket column (framework-specific column names apply — see [Template variables](#template-variables) for the naming convention on your framework). The engine looks up `ticket[field]`, coerces to string, and applies `operator` against `value`.
 
-- **`status`** -- ticket has a specific status slug
-- **`priority`** -- ticket priority is one of `low`, `medium`, `high`, `urgent`
-- **`ticket_type`** -- ticket type is `question`, `problem`, `incident`, or `task`
-- **`subject_contains`** -- ticket subject includes a keyword (case-insensitive)
-- **`description_contains`** -- ticket description includes a keyword
-- **`assigned`** / **`unassigned`** -- ticket has (or does not have) an assignee
-- **`department`** -- ticket belongs to a specific department
-- **`has_tag`** / **`lacks_tag`** -- ticket has (or does not have) a specific tag
-- **`requester_email_matches`** -- requester/contact email matches a pattern (glob or domain)
-- **`hours_open`** -- ticket has been open for more than N hours
-- **`from_channel`** -- ticket originated from a specific channel (`email`, `widget`, `api`, `chat`)
+**Operators:**
 
-Combine conditions freely. If you need OR semantics, create multiple workflows on the same trigger with different condition sets.
+| Operator | Meaning |
+|---|---|
+| `equals` / `not_equals` | String equality |
+| `contains` / `not_contains` | Substring match (case-sensitive) |
+| `starts_with` / `ends_with` | String prefix / suffix |
+| `greater_than` / `less_than` | Numeric comparison (value coerced via `Number()`) |
+| `greater_or_equal` / `less_or_equal` | Numeric comparison |
+| `is_empty` / `is_not_empty` | Trim + length check (value arg ignored) |
+
+**Example:** to match open tickets from VIPs, combine two conditions:
+
+```json
+{
+  "all": [
+    { "field": "status",             "operator": "equals",   "value": "open" },
+    { "field": "requesterEmail",     "operator": "ends_with", "value": "@vip.example.com" }
+  ]
+}
+```
+
+Conditions combine via `all` (AND) or `any` (OR); a bare array is treated as `all`. If you need disjoint OR-semantics across multiple triggers, define separate workflows on the same trigger with different condition sets.
+
+> **Note:** Conditions operate on whatever scalar fields the framework's ticket schema exposes. Relationship-based filters (has_tag, in_department_name, requester_email_matches_pattern) aren't built in — use a `ticket_type`-style discriminator column or write a pre-filter workflow that tags the ticket, then filter by tag downstream.
 
 ## Actions
 
@@ -89,16 +101,20 @@ Unknown variable names are left as literal `{{name}}` in the output so gaps are 
 
 The `delay` action splits a workflow run into two halves. Actions before the delay run inline. Remaining actions are persisted to a deferred-job queue with `run_at = now + N seconds` and picked up by a scheduled poller (runs once per minute by default) after the wait elapses.
 
-Example: "When a ticket is created by a VIP, wait 5 minutes, then if the ticket is still open, add a note to ping the on-call manager."
+Example: "When a ticket is created by a caller from an urgent priority, tag it, wait 5 minutes, then leave a note to page on-call."
 
-```yaml
-trigger: ticket.created
-conditions:
-  has_tag: vip
-actions:
-  - add_tag: needs-fast-response
-  - delay: 300                        # 5 minutes
-  - add_note: "Still open after 5 min -- page on-call."
+```json
+{
+  "trigger_event": "ticket.created",
+  "conditions": [
+    { "field": "priority", "operator": "equals", "value": "urgent" }
+  ],
+  "actions": [
+    { "type": "add_tag",  "value": "needs-fast-response" },
+    { "type": "delay",    "value": "300" },
+    { "type": "add_note", "value": "Still open after 5 min -- page on-call." }
+  ]
+}
 ```
 
 The first two actions happen immediately. If the ticket is still open 5 minutes later, the note is added; if the ticket was already closed in the meantime, the note still fires (the delay does not re-evaluate conditions -- it resumes the saved action sequence verbatim). To make conditional resume-time behavior, fan out to a separate workflow trigger.
@@ -125,39 +141,56 @@ The full ticket entity is passed through as `data.ticket` — relationships pres
 
 ### Auto-tag and assign high-priority VIP tickets
 
-```yaml
-trigger: ticket.created
-conditions:
-  requester_email_matches: "@vip.example.com"
-actions:
-  - change_priority: urgent
-  - add_tag: vip
-  - assign_round_robin: 7               # "Senior support" department id
-  - send_webhook: 9                     # page PagerDuty
+```json
+{
+  "trigger_event": "ticket.created",
+  "conditions": {
+    "all": [
+      { "field": "requesterEmail", "operator": "ends_with", "value": "@vip.example.com" }
+    ]
+  },
+  "actions": [
+    { "type": "change_priority",      "value": "urgent" },
+    { "type": "add_tag",              "value": "vip" },
+    { "type": "assign_round_robin",   "value": "7" },
+    { "type": "send_webhook",         "value": "9" }
+  ]
+}
 ```
 
 ### Chase stale tickets
 
-```yaml
-trigger: ticket.status_changed
-conditions:
-  status: pending
-actions:
-  - delay: 86400                         # 24 hours
-  - add_note: "Pending > 24h. Consider following up."
+```json
+{
+  "trigger_event": "ticket.status_changed",
+  "conditions": [
+    { "field": "status", "operator": "equals", "value": "pending" }
+  ],
+  "actions": [
+    { "type": "delay", "value": "86400" },
+    { "type": "add_note", "value": "Pending > 24h. Consider following up." }
+  ]
+}
 ```
 
 ### Triage by subject
 
-```yaml
-trigger: ticket.created
-conditions:
-  subject_contains: refund
-actions:
-  - set_department: 5                    # Billing
-  - add_tag: refund-request
-  - insert_canned_reply: "Hi {{requester_name}}, we've received your refund request (#{{reference_number}}) and will respond within 1 business day."
+```json
+{
+  "trigger_event": "ticket.created",
+  "conditions": [
+    { "field": "subject", "operator": "contains", "value": "refund" }
+  ],
+  "actions": [
+    { "type": "set_department",        "value": "5" },
+    { "type": "add_tag",               "value": "refund-request" },
+    { "type": "insert_canned_reply",
+      "value": "Hi, we've received your refund request (#{{referenceNumber}}) and will respond within 1 business day." }
+  ]
+}
 ```
+
+The canned-reply template uses `{{referenceNumber}}` because the NestJS reference stores ticket reference as a camelCase scalar column. Frameworks with snake_case columns would use `{{reference_number}}`. There is no `{{requester_name}}` variable — contact name is a separate related row that the interpolator doesn't traverse.
 
 ## Workflow logs
 
