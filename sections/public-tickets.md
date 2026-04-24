@@ -63,14 +63,15 @@ Validation the API performs for you:
 - `guest_policy_user_id` ≤ 0 or non-numeric is stored as empty; GET surfaces that as JSON `null`.
 - `guest_policy_signup_url_template` is trimmed and truncated to 500 characters.
 
-### Template variables in signup URL
+### Template variable in signup URL
 
-When `mode = prompt_signup`, the `guest_policy_signup_url_template` supports two `{{...}}` placeholders:
+When `mode = prompt_signup`, the `guest_policy_signup_url_template` supports a single `{token}` placeholder (single braces) that Escalated replaces with a URL-encoded, HMAC-scoped signup token derived from the contact's id and your configured `inbound.webhookSecret`. A typical template:
 
-- `{{email}}` — the contact's email, URL-encoded
-- `{{token}}` — a host-app-generated single-use signup token, if your host app provides one
+```
+https://app.example.com/signup?from_ticket={token}
+```
 
-Unknown placeholders are left as literal `{{name}}` so gaps are visible in the rendered URL rather than silently disappearing.
+The token is one-time use and lets your host app identify the originating `Contact` when the user completes signup. Your app verifies the token by round-tripping it through the same secret that signs Reply-To addresses.
 
 ## Widget submission
 
