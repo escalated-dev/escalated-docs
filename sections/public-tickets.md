@@ -156,4 +156,4 @@ Two key relationships:
 - `escalated_tickets.contact_id` is a nullable FK into `escalated_contacts.id`.
 - `escalated_contacts.user_id` (nullable host-app user FK) — set post-promotion
 
-Existing host-app users submitting via the widget: the widget controller resolves a `Contact` for them but also fills `ticket.requester_id` with their host-app user id, so both paths work.
+The widget endpoint accepts either `email` (guest path — creates/reuses a `Contact`, fills `ticket.contact_id`, and sets `ticket.requester_id` from the current guest policy) OR `requester_id` (legacy authenticated path — sets `ticket.requester_id` to the supplied host-app user id, no `Contact` is created). One of the two must be present or the endpoint returns 400. The `email` path is recommended — the legacy `requester_id` shortcut is kept for backwards compatibility with existing host-app integrations.
