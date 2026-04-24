@@ -2,8 +2,8 @@
 
 The public ticket system lets unauthenticated users submit tickets without a host-app account. Two entry points share the same pipeline:
 
-- **Embeddable widget** (`POST /escalated/widget/tickets`) — a support button you drop into marketing pages.
-- **Inbound email** (`POST /escalated/webhook/email/inbound`) — a Postmark/Mailgun/SES webhook that routes messages to the right ticket.
+- **Embeddable widget** — a support button you drop into marketing pages. The widget POSTs to the host framework's widget-tickets route (`/escalated/widget/tickets` on NestJS; `/support/widget/tickets` on every other framework).
+- **Inbound email** — a Postmark/Mailgun/SES webhook that routes messages to the right ticket. The endpoint path is framework-specific — see [Inbound Email](inbound-email.md) for the URL shape your plugin uses.
 
 Both paths look up or create a `Contact` by email, so repeat submissions from the same address are deduplicated. Once a contact exists, they can reply to confirmation emails and those replies thread back into the same conversation via RFC 5322 `Message-ID` + a signed `Reply-To` address.
 
@@ -95,7 +95,7 @@ Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottle
 
 ## Inbound email
 
-Point your transactional mail provider's inbound webhook at `/escalated/webhook/email/inbound`. The plugin supports three providers natively: **Postmark**, **Mailgun**, and **AWS SES** (via SNS HTTP subscription). See [Inbound Email](inbound-email.md) for per-framework setup details.
+Point your transactional mail provider's inbound webhook at your plugin's inbound-email endpoint. The exact path depends on the framework (NestJS: `/escalated/webhook/email/inbound`; Laravel: `/support/inbound/{adapter}`; others vary). All plugins support three providers natively: **Postmark**, **Mailgun**, and **AWS SES** (via SNS HTTP subscription). See [Inbound Email](inbound-email.md) for per-framework setup details.
 
 The inbound router resolves the target ticket in this order:
 
