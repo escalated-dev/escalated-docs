@@ -43,20 +43,20 @@ A condition is a `{ field, operator, value }` triple. `field` names any top-leve
 | `greater_or_equal` / `less_or_equal` | Numeric comparison |
 | `is_empty` / `is_not_empty` | Trim + length check (value arg ignored) |
 
-**Example:** to match open tickets from VIPs, combine two conditions:
+**Example:** to match high-priority tickets mentioning "refund" in the subject:
 
 ```json
 {
   "all": [
-    { "field": "status",             "operator": "equals",   "value": "open" },
-    { "field": "requesterEmail",     "operator": "ends_with", "value": "@vip.example.com" }
+    { "field": "priority", "operator": "equals",   "value": "urgent" },
+    { "field": "subject",  "operator": "contains", "value": "refund" }
   ]
 }
 ```
 
-Conditions combine via `all` (AND) or `any` (OR); a bare array is treated as `all`. If you need disjoint OR-semantics across multiple triggers, define separate workflows on the same trigger with different condition sets.
+Conditions combine via `all` (AND) or `any` (OR); a bare array is treated as `all`. If you need disjoint OR-semantics, define separate workflows on the same trigger with different condition sets.
 
-> **Note:** Conditions operate on whatever scalar fields the framework's ticket schema exposes. Relationship-based filters (has_tag, in_department_name, requester_email_matches_pattern) aren't built in — use a `ticket_type`-style discriminator column or write a pre-filter workflow that tags the ticket, then filter by tag downstream.
+> **Scope of accessible fields.** The engine flattens the ticket entity into a string map of top-level scalar columns only (id, referenceNumber, subject, description, priority, channel, statusId, departmentId, requesterId, assigneeId, contactId, …). Relationship data (`tags`, joined `Department`, joined `Contact.email`) is **not** in the map, so filters like "has tag vip" or "requester email ends with @foo.com" don't work out-of-the-box. If you need those, either (a) denormalize the field you care about onto the ticket (e.g. a `customer_tier` column populated at creation) or (b) use a first-pass workflow to tag the ticket, then filter downstream workflows by the new scalar-populated state.
 
 ## Actions
 
@@ -143,24 +143,26 @@ The full ticket entity is passed through as `data.ticket` — relationships pres
 
 ## Example workflows
 
-### Auto-tag and assign high-priority VIP tickets
+### Auto-tag and route billing tickets
 
 ```json
 {
   "trigger_event": "ticket.created",
   "conditions": {
     "all": [
-      { "field": "requesterEmail", "operator": "ends_with", "value": "@vip.example.com" }
+      { "field": "subject", "operator": "contains", "value": "billing" }
     ]
   },
   "actions": [
-    { "type": "change_priority",      "value": "urgent" },
-    { "type": "add_tag",              "value": "vip" },
+    { "type": "change_priority",      "value": "high" },
+    { "type": "add_tag",              "value": "billing" },
     { "type": "assign_round_robin",   "value": "7" },
     { "type": "send_webhook",         "value": "9" }
   ]
 }
 ```
+
+The `assign_round_robin` value `"7"` is the id of the Billing department; `"send_webhook"` value `"9"` is the id of a webhook you've configured under `Admin → Webhooks` (typically pointing at PagerDuty or similar).
 
 ### Chase stale tickets
 
