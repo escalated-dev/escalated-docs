@@ -23,17 +23,20 @@ The policy is global — it applies to every public submission. Host apps that n
 
 ### Boot-time defaults
 
-Every host-framework plugin accepts a compile-time default in its configuration block (the exact syntax varies per framework — see each plugin's README or the [installation](installation.md) page).
+Every host-framework plugin accepts a compile-time default in its configuration block. The exact syntax varies per framework (see each plugin's README or the [installation](installation.md) page), but the semantic shape is a tagged union with one of three modes:
 
 ```json
-{
-  "guest_policy": {
-    "mode": "unassigned",
-    "guest_user_id": null,
-    "signup_url_template": null
-  }
-}
+// unassigned (default)
+{ "mode": "unassigned" }
+
+// single shared guest user
+{ "mode": "guest_user", "guest_user_id": 42 }
+
+// prompt to sign up
+{ "mode": "prompt_signup", "signup_url_template": "https://app.example.com/signup?from_ticket={token}" }
 ```
+
+Mode-specific fields (`guest_user_id`, `signup_url_template`) are only meaningful when the matching mode is selected. NestJS + .NET + Go use camelCase keys (`guestUserId`, `signupUrlTemplate`); Laravel / Rails / Django / Symfony / etc. use snake_case. The runtime settings API below always round-trips snake_case.
 
 ### Runtime switching (admin settings page)
 
