@@ -74,14 +74,19 @@ Workflows can perform any of the following actions. Actions execute in the order
 
 ### Template variables
 
-`insert_canned_reply` and `add_note` support simple `{{variable}}` interpolation against the ticket. Available variables include:
+`insert_canned_reply` supports `{{variable}}` interpolation against the ticket. The engine flattens every top-level scalar column on the ticket row into the template context, so the variable names follow your framework's column naming convention.
 
-- `{{subject}}`, `{{priority}}`, `{{status}}`
-- `{{requester_name}}`, `{{requester_email}}`
-- `{{ticket_id}}`, `{{reference_number}}`
-- Any custom field slug on the ticket
+For the NestJS reference (camelCase):
 
-Unknown variables are left as literal `{{name}}` so gaps are visible in the rendered reply rather than silently disappearing.
+- `{{subject}}`, `{{description}}`, `{{priority}}`, `{{channel}}`
+- `{{referenceNumber}}`, `{{id}}`
+- `{{requesterId}}`, `{{contactId}}`, `{{assigneeId}}`, `{{departmentId}}`, `{{statusId}}`
+
+Frameworks whose columns are snake_case (Laravel, Rails, Django, WordPress, Symfony, Phoenix) expose the same fields under snake_case names — e.g. `{{reference_number}}`, `{{requester_id}}`. Check your framework's ticket schema for the exact list.
+
+Non-scalar relationships (the loaded `Tag[]` array, nested `Department`, etc.) are skipped — reach for a workflow hook or a dedicated action if you need to interpolate relation data.
+
+Unknown variable names are left as literal `{{name}}` in the output so gaps are visible in the rendered reply rather than silently disappearing.
 
 ### Round-robin assignment
 
