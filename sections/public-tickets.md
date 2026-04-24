@@ -42,20 +42,20 @@ Mode-specific fields (`guest_user_id`, `signup_url_template`) are only meaningfu
 
 Every host-framework plugin ships an admin page at `Admin → Settings → Public tickets` that writes to the plugin's settings table. The runtime value overrides the compile-time default.
 
-Under the hood, the page calls:
+Under the hood the page calls a dedicated GET + PUT pair on the host framework's admin API. Exact path varies per framework:
 
-```
-GET  /escalated/admin/settings/public-tickets
-PUT  /escalated/admin/settings/public-tickets
-```
+| Framework | Endpoint |
+|---|---|
+| Laravel / Rails / Django / Adonis / WordPress / Symfony / .NET / Go / Spring / Phoenix | `GET` + `PUT /admin/settings/public-tickets` (prefix varies: `/support/admin/` for Laravel/Rails/Django/etc., `/escalated/api/admin/` for Spring, `/support/admin/` for .NET + Go) |
+| NestJS reference | No dedicated endpoint — the widget controller reads a single `guest_policy` JSON value via the generic `PUT /escalated/admin/settings` endpoint with `[{ "key": "guest_policy", "value": {...}, "type": "json" }]` |
 
-with JSON body (all fields snake_case to match the wire format):
+For the 10 host-framework plugins, the PUT body is snake_case to match the wire format the shared Vue page sends:
 
 ```json
 {
   "guest_policy_mode": "guest_user",
   "guest_policy_user_id": 42,
-  "guest_policy_signup_url_template": "https://app.example.com/signup?email={{email}}"
+  "guest_policy_signup_url_template": "https://app.example.com/signup?from_ticket={token}"
 }
 ```
 
