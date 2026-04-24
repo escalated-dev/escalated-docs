@@ -87,6 +87,8 @@ The widget collects `email` (required), `name` (optional), `subject`, `descripti
 
 Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottleGuard`. Requests exceeding the limit get a `429` and no ticket is created.
 
+> **Deployment note:** The shipped guard keeps its counter in-memory, which is fine for single-instance deployments and tests but lets the limit leak under horizontal scale-out. For multi-instance production, swap the backing store for Redis (or your framework's equivalent shared cache). The guard is a pluggable class — override it when you bind the Escalated module.
+
 ## Inbound email
 
 Point your transactional mail provider's inbound webhook at `/escalated/webhook/email/inbound`. The plugin supports three providers natively: **Postmark**, **Mailgun**, and **AWS SES** (via SNS HTTP subscription). See [Inbound Email](inbound-email.md) for per-framework setup details.
