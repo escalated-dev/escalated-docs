@@ -100,12 +100,11 @@ Point your transactional mail provider's inbound webhook at `/escalated/webhook/
 The inbound router resolves the target ticket in this order:
 
 1. **`In-Reply-To` header** → ticket id parsed from our outbound `Message-ID`
-2. **`References` header** → same parse, for clients that don't set `In-Reply-To`
+2. **`References` header** → same parse, walks the whole chain for clients that drop `In-Reply-To`
 3. **Envelope `To`** → matches our signed `Reply-To` address `reply+{id}.{hmac8}@{domain}` (HMAC-SHA256, timing-safe compare)
 4. **Subject line** → contains a `[TK-XXX]` ticket reference
-5. **Legacy `InboundEmail` audit lookup** — for messages that predate the canonical Message-ID format
 
-If none match, the router creates a new ticket under the current guest policy.
+If none match, the router resolves/creates a `Contact` by sender email and creates a new ticket under the current guest policy.
 
 ## Workflow integration
 
