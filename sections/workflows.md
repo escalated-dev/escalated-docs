@@ -65,7 +65,7 @@ Workflows can perform any of the following actions. Actions execute in the order
 | `add_tag` | Attach a tag (by slug or id); no-op if already present |
 | `remove_tag` | Detach a tag; no-op if not present |
 | `assign_agent` | Assign to a specific agent by id, writing a ticket-activity audit row |
-| `assign_round_robin` | Assign to the least-loaded agent from a pool (see below) |
+| `assign_round_robin` | Assign to the least-loaded active agent in a department (see below) |
 | `add_note` | Add an internal note visible only to agents |
 | `insert_canned_reply` | Add a public reply with `{{field}}` template interpolation |
 | `add_follower` | Add a user as a ticket follower (idempotent) |
@@ -90,7 +90,7 @@ Unknown variable names are left as literal `{{name}}` in the output so gaps are 
 
 ### Round-robin assignment
 
-`assign_round_robin` accepts a list of agent ids (or "all agents in department X") and picks the **least-loaded** agent -- the one with the fewest currently-open tickets. This favors the agent most likely to be idle rather than rotating strictly. If two agents tie, the one with the lower id wins for determinism.
+`assign_round_robin` takes a department id as its `value` and picks the **least-loaded active + available agent** in that department — the one with the fewest currently-open tickets assigned to them. This favors the agent most likely to be idle rather than rotating strictly. If two agents tie on open-ticket count, the one with the lower user id wins for determinism. Ineligible inputs (non-numeric or zero department id, empty eligible-agent list) log a warning and skip without assigning.
 
 ### Delayed actions
 
@@ -114,25 +114,19 @@ The deferred-job queue retains rows after completion (status flips from `pending
 
 ## Webhook action
 
-`send_webhook` posts a JSON payload to a webhook you've configured under `Admin -> Webhooks`. The payload is:
+`send_webhook` takes a webhook id (the numeric id of a row you've configured under `Admin -> Webhooks`) and POSTs a payload to that webhook's configured URL. The HTTP body:
 
 ```json
 {
   "event": "workflow.triggered",
-  "workflow_id": 42,
-  "ticket": {
-    "id": 1234,
-    "reference_number": "TICK-1234",
-    "subject": "...",
-    "status": "open",
-    "priority": "high",
-    "assignee_id": 7,
-    "requester_email": "alice@example.com"
-  }
+  "data": {
+    "ticket": { "id": 1234, "subject": "...", "priority": "high", ... }
+  },
+  "timestamp": "2026-04-24T14:00:00.000Z"
 }
 ```
 
-Delivery follows the same retry + signing rules as other Escalated webhooks. Failures do not block subsequent actions in the same workflow.
+The full ticket entity is passed through as `data.ticket` — relationships present on the in-memory entity at dispatch time (tags, department) are included. Delivery follows the same HMAC-SHA256 signing + retry rules as every other Escalated webhook: the `X-Escalated-Signature` header carries `sha256=<hex>` of the payload body signed with the webhook's configured secret. Delivery failures are recorded on `WebhookDelivery` for the retry scheduler to pick up; they do not block subsequent actions in the same workflow.
 
 ## Example workflows
 
@@ -145,7 +139,7 @@ conditions:
 actions:
   - change_priority: urgent
   - add_tag: vip
-  - assign_round_robin: [3, 7, 11]     # senior agents
+  - assign_round_robin: 7               # "Senior support" department id
   - send_webhook: 9                     # page PagerDuty
 ```
 
