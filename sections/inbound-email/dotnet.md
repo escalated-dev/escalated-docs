@@ -1,6 +1,6 @@
 ### Webhook endpoint
 
-The .NET bundle exposes a single webhook for all providers. Configure Postmark and/or Mailgun to POST inbound mail to:
+The .NET bundle exposes a single webhook for all providers. Configure Postmark, Mailgun, or AWS SES (via SNS) to POST inbound mail to:
 
 ```
 POST /support/webhook/email/inbound?adapter=postmark
@@ -51,6 +51,17 @@ https://yourapp.com/support/webhook/email/inbound?adapter=mailgun
 ```
 
 Set the HMAC header the same way.
+
+**AWS SES** — create an SES receipt rule that publishes to an SNS topic, then subscribe your webhook URL to that topic:
+
+```
+https://yourapp.com/support/webhook/email/inbound?adapter=ses
+```
+
+SES-specific notes:
+- **Subscription confirmation** — AWS SNS sends a one-time `SubscriptionConfirmation` envelope when you first subscribe the endpoint. The bundle throws `SESSubscriptionConfirmationException` carrying the `SubscribeUrl`; your host controller should catch it and GET that URL to activate the subscription (then return `200 OK`).
+- **Custom headers** — SNS doesn't forward per-request custom headers from you, but it signs each delivery itself. Since the endpoint is secret-key-guarded, configure your infrastructure (load balancer, API gateway, or CloudFront) to inject the `X-Escalated-Inbound-Secret` header on requests to the SES path.
+- **Body extraction** — configure the SES receipt rule with action type `SNS` and encoding `BASE64` to receive the full raw MIME body. The bundle decodes `text/plain`, `text/html`, and `multipart/alternative` bodies. Without full content, metadata (from/to/subject/threading headers) is still extracted and tickets still route correctly via Message-ID threading.
 
 ### Testing
 

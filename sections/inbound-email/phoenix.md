@@ -1,6 +1,6 @@
 ### Webhook endpoint
 
-The Phoenix library exposes a single webhook controller for all providers. Configure Postmark and/or Mailgun to POST inbound mail to:
+The Phoenix library exposes a single webhook controller for all providers. Configure Postmark, Mailgun, or AWS SES (via SNS) to POST inbound mail to:
 
 ```
 POST /support/webhook/email/inbound?adapter=postmark
@@ -55,6 +55,28 @@ https://yourapp.com/support/webhook/email/inbound?adapter=mailgun
 ```
 
 Set the HMAC header the same way.
+
+**AWS SES** — create an SES receipt rule that publishes to an SNS topic, then subscribe your webhook URL to that topic:
+
+```
+https://yourapp.com/support/webhook/email/inbound?adapter=ses
+```
+
+SES-specific notes:
+- **Subscription confirmation** — AWS SNS sends a one-time `SubscriptionConfirmation` envelope when you first subscribe the endpoint. The parser returns `{:error, {:ses_subscription_confirmation, %{subscribe_url: ..., topic_arn: ..., token: ...}}}`. Match on the tuple in your controller and GET the `subscribe_url` to activate the subscription (then return 200).
+- **Custom headers** — SNS doesn't forward per-request custom headers, but it signs each delivery itself. Since the endpoint is secret-key-guarded, configure your infrastructure (load balancer, API gateway, or edge proxy) to inject the `x-escalated-inbound-secret` header on requests to the SES path.
+- **Body extraction** — configure the SES receipt rule with action type `SNS` and encoding `BASE64` to receive the full raw MIME body. The library's hand-rolled splitter decodes `text/plain`, `text/html`, `multipart/alternative`, and `quoted-printable` transfer encoding — no external MIME dep. Without full content, threading metadata is still extracted and tickets still route correctly via Message-ID threading.
+
+Register the SES parser alongside the others in `config/runtime.exs`:
+
+```elixir
+config :escalated,
+  inbound_parsers: [
+    Escalated.Services.Email.Inbound.PostmarkParser,
+    Escalated.Services.Email.Inbound.MailgunParser,
+    Escalated.Services.Email.Inbound.SESParser
+  ]
+```
 
 ### Testing
 
