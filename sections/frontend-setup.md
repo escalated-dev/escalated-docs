@@ -51,3 +51,20 @@ createInertiaApp({
   },
 });
 ```
+
+## 4. Provide a `window.route()` helper
+
+The Escalated frontend generates URLs to its own named routes through a global `route(name, params)` helper with the same signature as [Ziggy](https://github.com/tighten/ziggy) — Laravel's named-route URL generator.
+
+- **Laravel hosts:** install Ziggy (`composer require tightenco/ziggy`) and call `route()` is already on `window`. Nothing else to do.
+- **Non-Laravel hosts (Rails, Django, NestJS, Phoenix, Symfony, Adonis, Go, .NET, Spring, WordPress):** you need to ship a compatible shim that speaks Ziggy's API against your host framework's named-route table. At minimum, `route(name)` must return a URL string, and `route(name, params)` must return a URL string with the given params interpolated.
+
+If no `window.route` is installed when `EscalatedPlugin.install()` runs, the plugin installs a stub that throws a descriptive error on first call — this keeps a missing shim from surfacing as a cryptic `ReferenceError` deep inside a component render. You still need to replace the stub with a real helper before the UI is usable.
+
+```js
+// Minimal shim shape
+window.route = function (name, params) {
+  // lookup by `name` in your route table, interpolate `params`, return URL
+}
+```
+
