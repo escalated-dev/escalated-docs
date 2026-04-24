@@ -75,15 +75,19 @@ The token is one-time use and lets your host app identify the originating `Conta
 
 ## Widget submission
 
-Place the widget snippet on any page:
+Place the widget snippet on any page. Config is read from `data-*` attributes on the script tag (or from a `window.EscalatedWidget` object set before the script loads):
 
 ```html
-<script src="https://yourhost.example/escalated/widget/widget.js" async></script>
-<script>window.escalated = window.escalated || { init: (...args) => { (window.escalated.q = window.escalated.q || []).push(args); } };
-window.escalated('init', { tenantId: 'demo' });</script>
+<script src="https://yourhost.example/escalated-widget.js"
+        data-base-url="https://yourhost.example"
+        data-color="#4F46E5"
+        data-position="bottom-right"
+        async></script>
 ```
 
-The widget collects `email` (required), `name` (optional), `subject`, `description`, and an optional `priority`. On submit it POSTs to `/escalated/widget/tickets`.
+Only `data-base-url` is required; `data-color` (hex, defaults to indigo `#4F46E5`) and `data-position` (`bottom-right` | `bottom-left`, defaults to `bottom-right`) are optional. The widget mounts itself into a shadow-DOM host so host-app CSS can't leak in.
+
+Once open, the widget fetches `/escalated/widget/config` to pick up admin-side branding (primary color + logo override, configured by the host app's runtime settings), then renders a ticket form collecting `email` (required), `name` (optional), `subject`, `description`, and an optional `priority`. On submit it POSTs to `/escalated/widget/tickets`.
 
 Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottleGuard`. Requests exceeding the limit get a `429` and no ticket is created.
 
