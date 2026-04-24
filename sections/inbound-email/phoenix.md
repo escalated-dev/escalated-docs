@@ -85,3 +85,49 @@ The response shape:
 ```
 
 Provider-hosted attachments (Mailgun's larger files, for example) appear in `pending_attachment_downloads` so a background worker can fetch and persist them out-of-band.
+
+### Downloading provider-hosted attachments
+
+The library ships `Escalated.Services.Email.Inbound.AttachmentDownloader` for persisting the URLs in `:pending_attachment_downloads`. Run it from a `Task.async` or a dedicated Oban/Exq job so the webhook response goes back to the provider without waiting for the download.
+
+```elixir
+alias Escalated.Services.Email.Inbound.AttachmentDownloader
+alias Escalated.Services.Email.Inbound.LocalFileStorage
+
+storage = LocalFileStorage.new("/var/escalated/attachments")
+
+writer = %{
+  create_attachment: fn attrs ->
+    %Escalated.Schemas.Attachment{}
+    |> Escalated.Schemas.Attachment.changeset(attrs)
+    |> MyApp.Repo.insert()
+  end
+}
+
+options = %{
+  max_bytes: 25 * 1024 * 1024,                        # 25 MB size cap
+  basic_auth: {"api", System.fetch_env!("MAILGUN_API_KEY")}  # required for Mailgun
+}
+
+results =
+  AttachmentDownloader.download_all(
+    result.pending_attachment_downloads,
+    result.ticket_id,
+    result.reply_id,
+    storage,
+    writer,
+    options
+  )
+```
+
+`download_all/6` continues past per-attachment failures so a single bad URL doesn't block the rest. Each input gets a `%{pending, persisted, error}` map — `:persisted` is the inserted `Attachment` struct on success, `:error` carries the reason on failure.
+
+Over-sized attachments return `{:error, {:too_large, actual_bytes, max_bytes}}` — the partial body isn't persisted. Crafted filenames like `../../etc/passwd` are neutralized via `Path.basename/1` before they hit the storage backend.
+
+The default HTTP client is `:httpc` from the Erlang stdlib (no external dep). Host apps using Finch / HTTPoison / Req can pass `:http_client` to `options`:
+
+```elixir
+options = Map.put(options, :http_client, {MyApp.FinchClient, :get})
+```
+
+Host apps with durable cloud storage (S3, GCS, Azure Blob) build their own storage function-map with `put: fn filename, content, content_type -> ...` and pass it in place of `LocalFileStorage.new/1`.
