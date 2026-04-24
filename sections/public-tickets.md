@@ -150,10 +150,10 @@ After promotion, the former guest logs in and sees their full public-ticket hist
 
 ## Data model
 
-Two key relationships:
+Two key relationships (logical column names shown; actual column case matches the framework's convention — camelCase on NestJS and JPA-mapped plugins, snake_case on ActiveRecord / Eloquent / Django ORM):
 
-- `escalated_contacts` has a unique index on `email` (plus its own integer PK). `ContactService.findOrCreateByEmail` normalizes emails to lowercase at the service boundary before any query or insert, so lookups behave case-insensitively even though the DB index itself is case-sensitive.
-- `escalated_tickets.contact_id` is a nullable FK into `escalated_contacts.id`.
-- `escalated_contacts.user_id` (nullable host-app user FK) — set post-promotion
+- `escalated_contacts` has a unique index on the email column (plus its own integer PK). `ContactService.findOrCreateByEmail` normalizes emails to lowercase at the service boundary before any query or insert, so lookups behave case-insensitively even though the DB index itself is case-sensitive.
+- Ticket's `contact_id` / `contactId` is a nullable FK into `escalated_contacts.id` / `.id`.
+- Contact's `user_id` / `userId` is a nullable FK back to the host-app user model — set by `ContactService.promoteToUser` once a guest accepts a signup invite.
 
 The widget endpoint accepts either `email` (guest path — creates/reuses a `Contact`, fills `ticket.contact_id`, and sets `ticket.requester_id` from the current guest policy) OR `requester_id` (legacy authenticated path — sets `ticket.requester_id` to the supplied host-app user id, no `Contact` is created). One of the two must be present or the endpoint returns 400. The `email` path is recommended — the legacy `requester_id` shortcut is kept for backwards compatibility with existing host-app integrations.
