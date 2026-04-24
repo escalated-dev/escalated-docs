@@ -87,7 +87,7 @@ Place the widget snippet on any page. Config is read from `data-*` attributes on
 
 Only `data-base-url` is required; `data-color` (hex, defaults to indigo `#4F46E5`) and `data-position` (`bottom-right` | `bottom-left`, defaults to `bottom-right`) are optional. The widget mounts itself into a shadow-DOM host so host-app CSS can't leak in.
 
-Once open, the widget fetches `/escalated/widget/config` to pick up admin-side branding (primary color + logo override, configured by the host app's runtime settings), then renders a ticket form collecting `email` (required), `name` (optional), `subject`, `description`, and an optional `priority`. On submit it POSTs to `/escalated/widget/tickets`.
+On open, the widget optionally fetches `/support/widget/config` (host-framework-dependent — some plugins implement this to serve admin-configured branding overrides, others fall back to the `data-*` attributes) and renders a ticket form collecting `email` (required), `name` (optional), `subject`, `description`, and an optional `priority`. On submit it POSTs to the host framework's widget tickets endpoint (`/escalated/widget/tickets` on NestJS; `/support/widget/tickets` on Laravel/Rails/Django/etc.).
 
 Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottleGuard`. Requests exceeding the limit get a `429` and no ticket is created.
 
