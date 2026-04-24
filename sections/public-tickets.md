@@ -95,7 +95,18 @@ Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottle
 
 ## Inbound email
 
-Point your transactional mail provider's inbound webhook at your plugin's inbound-email endpoint. The exact path depends on the framework (NestJS: `/escalated/webhook/email/inbound`; Laravel: `/support/inbound/{adapter}`; others vary). All plugins support three providers natively: **Postmark**, **Mailgun**, and **AWS SES** (via SNS HTTP subscription). See [Inbound Email](inbound-email.md) for per-framework setup details.
+Point your transactional mail provider's inbound webhook at your plugin's inbound-email endpoint. The exact path depends on the framework (NestJS: `/escalated/webhook/email/inbound`; Laravel: `/support/inbound/{adapter}`; others vary). Provider coverage varies too:
+
+| Provider | NestJS + greenfield plugins¹ | Legacy plugins² |
+|---|:---:|:---:|
+| Postmark | ✅ | ✅ |
+| Mailgun | ✅ | ✅ |
+| AWS SES (via SNS HTTP) | ✅ | — |
+
+¹ `escalated-nestjs`, `escalated-dotnet`, `escalated-spring`, `escalated-go`, `escalated-phoenix`, `escalated-symfony`
+² `escalated-laravel`, `escalated-rails`, `escalated-django`, `escalated-adonis`, `escalated-wordpress`
+
+See [Inbound Email](inbound-email.md) for per-framework setup details.
 
 The inbound router resolves the target ticket in this order:
 
