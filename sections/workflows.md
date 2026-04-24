@@ -99,7 +99,9 @@ Unknown variable names are left as literal `{{name}}` in the output so gaps are 
 
 ### Delayed actions
 
-The `delay` action splits a workflow run into two halves. Actions before the delay run inline. Remaining actions are persisted to a deferred-job queue with `run_at = now + N seconds` and picked up by a scheduled poller (runs once per minute by default) after the wait elapses.
+The `delay` action splits a workflow run into two halves. Actions before the delay run inline. Remaining actions are persisted to a deferred-job queue with `run_at = now + N` and picked up by a scheduled poller (runs once per minute by default) after the wait elapses.
+
+**`N` units differ by framework.** NestJS, Spring, and WordPress interpret `delay.value` as **seconds**; Laravel, Rails, Django, Adonis, .NET, Go, Phoenix, and Symfony interpret it as **minutes** (matching the pre-existing `delayed_actions` schema those plugins had before this rollout). Check your plugin's workflow-executor source if you're unsure.
 
 Example: "When a ticket is created by a caller from an urgent priority, tag it, wait 5 minutes, then leave a note to page on-call."
 
@@ -116,6 +118,8 @@ Example: "When a ticket is created by a caller from an urgent priority, tag it, 
   ]
 }
 ```
+
+> `"value": "300"` is 5 minutes on the seconds-unit frameworks (NestJS / Spring / WordPress). On the minutes-unit frameworks you'd write `"value": "5"` for the same behavior.
 
 The first two actions happen immediately. If the ticket is still open 5 minutes later, the note is added; if the ticket was already closed in the meantime, the note still fires (the delay does not re-evaluate conditions -- it resumes the saved action sequence verbatim). To make conditional resume-time behavior, fan out to a separate workflow trigger.
 
@@ -172,6 +176,8 @@ The full ticket entity is passed through as `data.ticket` — relationships pres
   ]
 }
 ```
+
+> `"value": "86400"` is 24h on the seconds-unit frameworks; on minutes-unit frameworks use `"value": "1440"`.
 
 ### Triage by subject
 
