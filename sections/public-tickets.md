@@ -149,7 +149,8 @@ After promotion, the former guest logs in and sees their full public-ticket hist
 
 Two key relationships:
 
-- `escalated_contacts.id` (unique email index, case-insensitive) ← `escalated_tickets.contact_id` (nullable FK)
+- `escalated_contacts` has a unique index on `email` (plus its own integer PK). `ContactService.findOrCreateByEmail` normalizes emails to lowercase at the service boundary before any query or insert, so lookups behave case-insensitively even though the DB index itself is case-sensitive.
+- `escalated_tickets.contact_id` is a nullable FK into `escalated_contacts.id`.
 - `escalated_contacts.user_id` (nullable host-app user FK) — set post-promotion
 
 Existing host-app users submitting via the widget: the widget controller resolves a `Contact` for them but also fills `ticket.requester_id` with their host-app user id, so both paths work.
