@@ -194,12 +194,15 @@ The canned-reply template uses `{{referenceNumber}}` because the NestJS referenc
 
 ## Workflow logs
 
-Every workflow run -- match or no match, success or failure -- writes a row to the workflow log visible at `Admin -> Workflows -> Logs`. Each row records:
+Every workflow *considered* -- match or no match -- writes a row to `escalated_workflow_logs`, surfaced in the UI at `Admin -> Workflows -> Logs`. Each row records:
 
-- Trigger event, triggering ticket id, workflow id
-- Whether conditions matched
-- For each action: status (`done`, `skipped`, `failed`) and any error message
-- For deferred actions: a link to the deferred-job row and its eventual outcome
+- Trigger event string, triggering ticket id (FK), workflow id (FK)
+- `conditions_matched` boolean — whether the workflow actually fired
+- `actions_executed_raw` JSON — the actions array as stored on the workflow when it fired (not per-action status; re-read the workflow to see current config)
+- `error_message` — top-level error from the executor if the whole run threw, else null. Individual action failures within the executor are log-warn and do NOT surface here
+- `started_at` / `completed_at` timestamps so you can derive duration
+
+Deferred (`delay`) actions do not get their own log row — inspect `escalated_deferred_workflow_jobs` directly (status + last_error columns) to audit what fired when.
 
 ## Managing workflows
 
