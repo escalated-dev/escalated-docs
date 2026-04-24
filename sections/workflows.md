@@ -20,20 +20,13 @@ When an event fires, Escalated dispatches it to the workflow engine, which looks
 |---|---|
 | `ticket.created` | A new ticket is created (via API, inbound email, widget, or agent UI) |
 | `ticket.updated` | Any field on the ticket changes |
-| `ticket.status_changed` | The ticket status transitions (e.g. `open -> solved`) |
-| `ticket.priority_changed` | The priority changes |
 | `ticket.assigned` | The `assignee_id` changes |
-| `ticket.department_changed` | The ticket moves to a different department |
-| `ticket.tagged` | A tag is added or removed |
-| `ticket.reopened` | A closed ticket receives a new reply and is reopened |
+| `ticket.status_changed` | The ticket status transitions (e.g. `open -> solved`) |
 | `reply.created` | Any reply is added (agent or customer) |
-| `reply.agent_reply` | An agent-authored reply is added |
-| `sla.warning` | A ticket nears its SLA target |
-| `sla.breached` | A ticket breaches its SLA target |
-| `inbound.received` | The inbound-email webhook parses a message |
-| `signup.invite` | A guest submission under `prompt_signup` policy should trigger a signup invite |
 
 A workflow subscribes to exactly one trigger event. For rules that should react to multiple events, define a workflow per event.
+
+Fine-grained event subtypes (priority changed, tagged, reopened, SLA warnings, inbound received, signup invites) all fire on the Escalated event bus too, but today they are not bridged into the Workflow runner — they are consumed by the built-in email + activity log listeners instead. Conditions like "priority equals high" or "has tag vip" let you filter the five event types above to approximate per-subtype behavior.
 
 ## Conditions
 
@@ -189,7 +182,7 @@ The `delay` action and any other deferred behaviors depend on the application sc
 |---|---|
 | "When a ticket is created, do X" | Workflow (`ticket.created`) |
 | "Every 15 minutes, check all pending tickets and close > 7 days" | Automation |
-| "When an agent replies, send a webhook" | Workflow (`reply.agent_reply`) |
+| "When an agent replies, send a webhook" | Workflow (`reply.created` with a condition filtering out customer-authored replies) |
 | "Nightly: add the `stale` tag to tickets idle > 72h" | Automation |
 | "When a VIP submits, wait 5 min then escalate if still open" | Workflow (`ticket.created` + `delay`) |
 
