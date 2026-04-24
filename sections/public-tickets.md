@@ -42,14 +42,17 @@ Mode-specific fields (`guest_user_id`, `signup_url_template`) are only meaningfu
 
 Every host-framework plugin ships an admin page at `Admin → Settings → Public tickets` that writes to the plugin's settings table. The runtime value overrides the compile-time default.
 
-Under the hood the page calls a dedicated GET + PUT pair on the host framework's admin API. Exact path varies per framework:
+Under the hood the page calls a dedicated `GET` + `PUT /admin/settings/public-tickets` pair on the host framework's admin API. Every framework ships this endpoint; only the route prefix varies:
 
-| Framework | Endpoint |
+| Framework | Prefix |
 |---|---|
-| Laravel / Rails / Django / Adonis / WordPress / Symfony / .NET / Go / Spring / Phoenix | `GET` + `PUT /admin/settings/public-tickets` (prefix varies: `/support/admin/` for Laravel/Rails/Django/etc., `/escalated/api/admin/` for Spring, `/support/admin/` for .NET + Go) |
-| NestJS reference | No dedicated endpoint — the widget controller reads a single `guest_policy` JSON value via the generic `PUT /escalated/admin/settings` endpoint with `[{ "key": "guest_policy", "value": {...}, "type": "json" }]` |
+| NestJS reference | `/escalated/admin/settings/public-tickets` |
+| Laravel / Rails / Django / Adonis / WordPress / Symfony | `/support/admin/settings/public-tickets` |
+| Spring | `/escalated/api/admin/settings/public-tickets` |
+| .NET / Go | `/support/admin/settings/public-tickets` |
+| Phoenix | `/admin/settings/public-tickets` (inside `/support/...` if you mount it there) |
 
-For the 10 host-framework plugins, the PUT body is snake_case to match the wire format the shared Vue page sends:
+The PUT body is snake_case to match the wire format the shared Vue page sends:
 
 ```json
 {
