@@ -1,6 +1,8 @@
 # Automations
 
-Automations are time-based rules that run on a recurring schedule to update tickets automatically. Unlike macros (which agents trigger manually), automations execute in the background and apply to every ticket that matches their conditions.
+Automations are **admin-configured, time-based rules** that run on a recurring schedule and update tickets automatically. They are designed for things you can't react to with an event — for example, "close any ticket that's been waiting more than 7 days." Silence has no trigger, so a [Workflow](workflows.md) can't handle this case; an Automation can.
+
+> **Picking the right tool:** Escalated has three automation surfaces — [Workflows](workflows.md) (admin, event-driven), Automations (admin, time-based), and [Macros](macros.md) (agent, manual). See [Workflows, Automations, and Macros](automation-types.md) for the comparison and a decision tree.
 
 > **Note:** Automations require a running scheduler. See [Scheduling](scheduling.md) for setup instructions.
 
