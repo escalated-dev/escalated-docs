@@ -1,6 +1,10 @@
 # Macros
 
-Macros are reusable action sequences that agents can apply to a ticket with one click. A single macro can change the status, set the priority, assign an agent, add a reply, and more -- all at once.
+Macros are **agent-applied, manual one-click action bundles**. An agent picks a macro from a dropdown on a specific ticket, clicks "apply," and every action in the bundle runs at once — change the status, set the priority, assign an agent, add a reply, and so on.
+
+Macros are deliberately *not* a rules engine. They have no conditions and no triggers; they just package up a sequence of actions for an agent to apply with a single click.
+
+> **Picking the right tool:** Escalated has three automation surfaces — [Workflows](workflows.md) (admin, event-driven), [Automations](automations.md) (admin, time-based), and Macros (agent, manual). See [Workflows, Automations, and Macros](automation-types.md) for the comparison and a decision tree.
 
 ## Macro actions
 
