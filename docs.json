@@ -55,6 +55,12 @@
             "type": "single"
         },
         {
+            "slug": "public-tickets",
+            "label": "Public Tickets",
+            "anchor": "public-tickets",
+            "type": "single"
+        },
+        {
             "slug": "bulk-actions",
             "label": "Bulk Actions",
             "anchor": "bulk-actions",
