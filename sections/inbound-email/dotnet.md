@@ -82,3 +82,35 @@ The response shape:
 ```
 
 Provider-hosted attachments (Mailgun's larger files, for example) appear in `pendingAttachmentDownloads` so a background worker can fetch and persist them out-of-band.
+
+### Downloading provider-hosted attachments
+
+The bundle ships `AttachmentDownloader` for persisting the URLs in `pendingAttachmentDownloads`. Run it after `InboundEmailService.ProcessAsync` returns — typically from a background job queue so the webhook response is sent back to the provider without waiting for the download.
+
+```csharp
+using Escalated.Services.Email.Inbound;
+
+var storage = new LocalFileAttachmentStorage("/var/escalated/attachments");
+
+var downloader = new AttachmentDownloader(
+    httpClient: new HttpClient(),
+    storage: storage,
+    db: dbContext,
+    logger: logger,
+    options: new AttachmentDownloaderOptions
+    {
+        MaxBytes = 25 * 1024 * 1024,                            // 25 MB size cap
+        BasicAuth = new BasicAuth("api", mailgunApiKey),        // required for Mailgun
+    });
+
+var results = await downloader.DownloadAllAsync(
+    result.PendingAttachmentDownloads,
+    ticketId: result.TicketId.Value,
+    replyId: result.ReplyId);
+```
+
+`DownloadAllAsync` continues past per-attachment failures so a single bad URL doesn't block the rest. Each input gets an `AttachmentDownloadResult` with either `Persisted` (the new `Attachment` row) or `Error` (the exception) set.
+
+Over-sized attachments raise `AttachmentTooLargeException` — the partial body isn't persisted. Crafted filenames like `../../etc/passwd` are neutralized via `Path.GetFileName` before they hit the storage backend.
+
+Host apps with durable cloud storage (S3, Azure Blob, GCS) implement `IAttachmentStorage` themselves and pass it to `AttachmentDownloader` in place of the reference `LocalFileAttachmentStorage`.

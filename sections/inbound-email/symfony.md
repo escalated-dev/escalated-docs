@@ -78,6 +78,44 @@ The response shape:
 
 Provider-hosted attachments (Mailgun's larger files, for example) appear in `pending_attachment_downloads` so a background worker can fetch and persist them out-of-band.
 
+### Downloading provider-hosted attachments
+
+The bundle ships `AttachmentDownloader` for persisting those URLs. Run it after `InboundEmailService::process()` returns — typically dispatched through Symfony Messenger so the webhook response goes back to the provider without waiting for the download.
+
+```php
+use Escalated\Symfony\Mail\Inbound\AttachmentDownloader;
+use Escalated\Symfony\Mail\Inbound\AttachmentDownloaderOptions;
+use Escalated\Symfony\Mail\Inbound\BasicAuth;
+use Escalated\Symfony\Mail\Inbound\CurlAttachmentHttpClient;
+use Escalated\Symfony\Mail\Inbound\LocalFileAttachmentStorage;
+
+$storage = new LocalFileAttachmentStorage('/var/escalated/attachments');
+
+$downloader = new AttachmentDownloader(
+    httpClient: new CurlAttachmentHttpClient(),
+    storage: $storage,
+    em: $entityManager,
+    options: new AttachmentDownloaderOptions(
+        maxBytes: 25 * 1024 * 1024,                            // 25 MB size cap
+        basicAuth: new BasicAuth('api', $_ENV['MAILGUN_API_KEY']),
+    ),
+);
+
+$results = $downloader->downloadAll(
+    $result->pendingAttachmentDownloads,
+    ticketId: $result->ticketId,
+    replyId: $result->replyId,
+);
+```
+
+`downloadAll()` continues past per-attachment failures so a single bad URL doesn't block the rest. Each input gets an `AttachmentDownloadResult` with either `persisted` (the new `Attachment` entity) or `error` (the `Throwable`) set.
+
+Over-sized attachments throw `AttachmentTooLargeException` — the partial body isn't persisted. Crafted filenames like `../../etc/passwd` are neutralized via `basename()` before they hit the storage backend.
+
+The default HTTP client uses cURL (no extra Composer dep). Host apps using `symfony/http-client`, Guzzle, etc. can implement `AttachmentHttpClientInterface` with a thin adapter and pass it instead.
+
+Host apps with durable cloud storage (S3, Azure Blob, GCS) implement `AttachmentStorageInterface` themselves and pass it to `AttachmentDownloader` in place of the reference `LocalFileAttachmentStorage`.
+
 ### Adding a custom parser
 
 The bundle discovers inbound parsers by the `escalated.inbound_parser` tag. To add a new one, implement `Escalated\Symfony\Mail\Inbound\InboundEmailParser` and autoconfigure:

@@ -70,7 +70,7 @@ The response shape:
 ```json
 {
   "status": "created",
-  "outcome": "CREATED_NEW",
+  "outcome": "created_new",
   "ticketId": 7,
   "replyId": null,
   "pendingAttachmentDownloads": []
@@ -78,3 +78,39 @@ The response shape:
 ```
 
 Provider-hosted attachments (Mailgun's larger files, for example) appear in `pendingAttachmentDownloads` so a background worker can fetch and persist them out-of-band.
+
+### Downloading provider-hosted attachments
+
+The starter ships `AttachmentDownloader` for persisting the URLs in `pendingAttachmentDownloads`. Run it after `InboundEmailService.process` returns — typically from an `@Async` method or a Spring Batch job so the webhook response is sent back to the provider without waiting for the download.
+
+```java
+import dev.escalated.services.email.inbound.AttachmentDownloader;
+import dev.escalated.services.email.inbound.LocalFileAttachmentStorage;
+
+import java.net.http.HttpClient;
+import java.nio.file.Path;
+
+var storage = new LocalFileAttachmentStorage(Path.of("/var/escalated/attachments"));
+
+var downloader = new AttachmentDownloader(
+    HttpClient.newHttpClient(),
+    storage,
+    attachmentRepository,
+    ticketRepository,
+    replyRepository,
+    new AttachmentDownloader.Options()
+        .maxBytes(25L * 1024 * 1024)             // 25 MB size cap
+        .basicAuth("api", mailgunApiKey)         // required for Mailgun
+);
+
+List<AttachmentDownloader.Result> results = downloader.downloadAll(
+    result.pendingAttachmentDownloads(),
+    result.ticketId(),
+    result.replyId());
+```
+
+`downloadAll` continues past per-attachment failures so a single bad URL doesn't block the rest. Each input gets a `Result` with either `persisted` (the new `Attachment` row) or `error` (the `Throwable`) set.
+
+Over-sized attachments raise `AttachmentTooLargeException` — the partial body isn't persisted. Crafted filenames like `../../etc/passwd` are neutralized via `Path.getFileName` before they hit the storage backend.
+
+Host apps with durable cloud storage (S3, Azure Blob, GCS) implement `AttachmentStorage` themselves and pass it to `AttachmentDownloader` in place of the reference `LocalFileAttachmentStorage`.

@@ -86,3 +86,38 @@ The response shape:
 ```
 
 Provider-hosted attachments (Mailgun's larger files, for example) appear in `pending_attachment_downloads` so a background worker can fetch and persist them out-of-band.
+
+### Downloading provider-hosted attachments
+
+The module ships `email.AttachmentDownloader` for persisting the URLs in `pending_attachment_downloads`. Run it from a goroutine (or a queue worker) after `InboundEmailService.Process` returns, so the webhook response goes back to the provider without waiting for the download.
+
+```go
+import "github.com/escalated-dev/escalated-go/services/email"
+
+storage, err := email.NewLocalFileStorage("/var/escalated/attachments")
+if err != nil {
+    log.Fatal(err)
+}
+
+downloader := email.NewAttachmentDownloader(
+    email.DownloadConfig{
+        MaxBytes:  25 * 1024 * 1024,                         // 25 MB size cap
+        BasicAuth: &email.BasicAuth{Username: "api", Password: mailgunAPIKey},
+    },
+    storage,
+    store, // your store.Store — already implements CreateAttachment
+)
+
+results, errs := downloader.DownloadAll(ctx, result.PendingAttachmentDownloads, result.TicketID, nil)
+for i, err := range errs {
+    if err != nil {
+        log.Printf("download %d failed: %v", i, err)
+    }
+}
+```
+
+`DownloadAll` continues past per-attachment failures so a single bad URL doesn't block the rest. Parallel slices report each input's outcome: a non-nil `*models.Attachment` on success and a non-nil `error` on failure.
+
+Over-sized attachments return `email.ErrAttachmentTooLarge` (check with `errors.Is`) — the partial body isn't persisted. Crafted filenames like `../../etc/passwd` are neutralized via `filepath.Base` before they hit the storage backend.
+
+Host apps with durable cloud storage (S3, GCS, Azure Blob) implement `email.AttachmentStorage` themselves and pass it to `NewAttachmentDownloader` in place of the reference `LocalFileStorage`.
