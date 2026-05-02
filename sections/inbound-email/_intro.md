@@ -1,6 +1,6 @@
 # Inbound Email
 
-Create and reply to tickets directly from incoming emails. Escalated supports **Postmark** and **Mailgun** webhooks out of the box, with an open parser interface for plugging in additional providers.
+Create and reply to tickets directly from incoming emails. Escalated supports **Postmark**, **Mailgun**, and **AWS SES** (via SNS HTTP subscription) out of the box, with an open parser interface for plugging in additional providers.
 
 ## How It Works
 
@@ -15,11 +15,11 @@ All greenfield framework ports (.NET, Spring, Go, Phoenix, Symfony) expose a **s
 
 | Framework | Webhook URL |
 | --- | --- |
-| .NET | `POST /support/webhook/email/inbound?adapter=<postmark\|mailgun>` |
-| Spring Boot | `POST /escalated/webhook/email/inbound?adapter=<postmark\|mailgun>` |
-| Go | `POST /escalated/webhook/email/inbound?adapter=<postmark\|mailgun>` |
-| Phoenix | `POST /support/webhook/email/inbound?adapter=<postmark\|mailgun>` |
-| Symfony | `POST /escalated/webhook/email/inbound?adapter=<postmark\|mailgun>` |
+| .NET | `POST /support/webhook/email/inbound?adapter=<postmark\|mailgun\|ses>` |
+| Spring Boot | `POST /escalated/webhook/email/inbound?adapter=<postmark\|mailgun\|ses>` |
+| Go | `POST /escalated/webhook/email/inbound?adapter=<postmark\|mailgun\|ses>` |
+| Phoenix | `POST /support/webhook/email/inbound?adapter=<postmark\|mailgun\|ses>` |
+| Symfony | `POST /escalated/webhook/email/inbound?adapter=<postmark\|mailgun\|ses>` |
 
 The legacy host-app integrations (Laravel, Rails, Django, Adonis, Filament, WordPress) expose provider-specific endpoints — see the respective framework page for the exact URL.
 

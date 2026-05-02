@@ -1,6 +1,6 @@
 ### Webhook endpoint
 
-The Go module exposes a single webhook handler for all providers. Configure Postmark and/or Mailgun to POST inbound mail to:
+The Go module exposes a single webhook handler for all providers. Configure Postmark, Mailgun, or AWS SES (via SNS) to POST inbound mail to:
 
 ```
 POST /escalated/webhook/email/inbound?adapter=postmark
@@ -56,6 +56,17 @@ https://yourapp.com/escalated/webhook/email/inbound?adapter=mailgun
 ```
 
 Set the HMAC header the same way.
+
+**AWS SES** — create an SES receipt rule that publishes to an SNS topic, then subscribe your webhook URL to that topic:
+
+```
+https://yourapp.com/escalated/webhook/email/inbound?adapter=ses
+```
+
+SES-specific notes:
+- **Subscription confirmation** — AWS SNS sends a one-time `SubscriptionConfirmation` envelope when you first subscribe the endpoint. The parser returns a sentinel `email.ErrSESSubscriptionConfirmation` wrapping an `*email.SESSubscriptionConfirmation` that carries the `SubscribeURL`. Use `errors.As` to unwrap it; your handler should GET that URL to activate the subscription (then return 200).
+- **Custom headers** — SNS doesn't forward per-request custom headers, but it signs each delivery itself. Since the endpoint is secret-key-guarded, configure your infrastructure (load balancer, API gateway, or CDN) to inject the `X-Escalated-Inbound-Secret` header on requests to the SES path.
+- **Body extraction** — configure the SES receipt rule with action type `SNS` and encoding `BASE64` to receive the full raw MIME body. The module decodes `text/plain`, `text/html`, and `multipart/alternative` bodies using stdlib `net/mail` + `mime/multipart`. Without full content, threading metadata is still extracted and tickets still route correctly via Message-ID threading.
 
 ### Testing
 
