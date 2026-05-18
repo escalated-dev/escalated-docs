@@ -23,6 +23,70 @@ export default {
 }
 ```
 
+> **Tailwind 4 users:** the explicit `content` glob isn't required — Tailwind 4 auto-detects classes from imported modules. You can skip this step.
+
+### Using Escalated without a Tailwind build
+
+Escalated's Vue components are written with Tailwind utility classes, so **some Tailwind-compatible class processor must be available in the host page**. If you don't want to add a Tailwind toolchain to your build pipeline, you have a few options:
+
+#### Option A: Tailwind Play CDN (zero build)
+
+Best for prototyping and internal tools. Drop this `<script>` into the page that hosts Escalated:
+
+```html
+<script src="https://cdn.tailwindcss.com"></script>
+```
+
+The CDN JIT-compiles classes at runtime. **Trade-offs:** ~3 MB script tag, no class purging, slight FOUC. Not recommended for high-traffic production traffic.
+
+#### Option B: Tailwind standalone CLI (no npm needed)
+
+Generates a static stylesheet without Vite/Webpack integration:
+
+```bash
+# Download the standalone CLI for your platform from
+# https://tailwindcss.com/blog/standalone-cli, then:
+tailwindcss \
+  -i ./input.css \
+  -o ./public/escalated.css \
+  --content './node_modules/@escalated-dev/escalated/src/**/*.vue' \
+  --minify
+```
+
+Link the resulting stylesheet from your page (`<link rel="stylesheet" href="/escalated.css">`). Re-run when you upgrade Escalated.
+
+The `input.css` needs only the three Tailwind directives:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+#### Option C: UnoCSS or Twind (Tailwind-compatible atomic CSS engines)
+
+If your project already uses one of these, configure the Tailwind preset and point it at the Escalated package:
+
+```js
+// uno.config.ts
+import { defineConfig, presetWind } from 'unocss'
+
+export default defineConfig({
+  presets: [presetWind()],
+  content: {
+    filesystem: ['node_modules/@escalated-dev/escalated/src/**/*.vue'],
+  },
+})
+```
+
+Class semantics match Tailwind 3 closely. Some bleeding-edge utility classes may differ — file an issue if you hit one.
+
+#### Option D: Forking with hand-rolled CSS
+
+Last resort. Replace every utility class with scoped per-component CSS. Substantial maintenance burden; not officially supported.
+
+> If none of A–D fits your constraints, [open a discussion](https://github.com/escalated-dev/escalated/discussions) — we're tracking interest in a pre-compiled CSS distribution.
+
 ## 3. Configure the Inertia page resolver
 
 Pages prefixed with `Escalated/` are resolved from the npm package:
