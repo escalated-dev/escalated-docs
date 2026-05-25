@@ -91,6 +91,12 @@
             "type": "single"
         },
         {
+            "slug": "newsletters",
+            "label": "Newsletters",
+            "anchor": "newsletters",
+            "type": "single"
+        },
+        {
             "slug": "followers",
             "label": "Followers",
             "anchor": "followers",
