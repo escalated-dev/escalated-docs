@@ -5,7 +5,7 @@
 ## 1. تثبيت حزمة npm
 
 ```bash
-$ npm install @escalated-dev/escalated
+npm install @escalated-dev/escalated
 ```
 
 ## 2. إضافتها إلى محتوى Tailwind
@@ -21,7 +21,18 @@ export default {
 }
 ```
 
+في Tailwind CSS v4+، أضف Escalated كمصدر في ملف CSS الخاص بتطبيقك بدلاً من ذلك:
+
+```css
+/* resources/css/app.css */
+@source '../../node_modules/@escalated-dev/escalated/src/**/*.vue';
+```
+
+عدّل المسار النسبي إذا كان ملف CSS في مكان آخر.
+
 ## 3. تكوين محلل صفحات Inertia
+
+تفترض هذه الخطوة أن Inertia وVue مثبتان ومكوّنان مسبقاً.
 
 يتم حل الصفحات التي تبدأ بـ `Escalated/` من حزمة npm:
 

@@ -1,11 +1,11 @@
-Definisci due gate nel tuo `AppServiceProvider`:
+Definisci due gate in `App\Providers\AppServiceProvider::boot()` per Laravel 12+, oppure in `App\Providers\AuthServiceProvider::boot()` per Laravel 11 e versioni precedenti:
 
 ```php
 use Illuminate\Support\Facades\Gate;
 
 // Chi può accedere alla dashboard agente e gestire i ticket
 Gate::define('escalated-agent', fn ($user) =>
-    $user->is_agent || $user->is_admin
+    $user->is_agent
 );
 
 // Chi può accedere alle impostazioni admin (dipartimenti, SLA, regole, ecc.)

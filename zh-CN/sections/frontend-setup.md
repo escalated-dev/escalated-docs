@@ -5,7 +5,7 @@ Escalated以npm包的形式提供共享的Inertia.js + Vue 3 UI。所有框架�
 ## 1. 安装npm包
 
 ```bash
-$ npm install @escalated-dev/escalated
+npm install @escalated-dev/escalated
 ```
 
 ## 2. 添加到Tailwind内容配置
@@ -21,7 +21,18 @@ export default {
 }
 ```
 
+?? Tailwind CSS v4+???????? CSS ???? Escalated ??? source:
+
+```css
+/* resources/css/app.css */
+@source '../../node_modules/@escalated-dev/escalated/src/**/*.vue';
+```
+
+???? CSS ?????????????????
+
 ## 3. 配置Inertia页面解析器
+
+?????????????? Inertia ? Vue?
 
 以`Escalated/`为前缀的页面将从npm包中解析：
 
