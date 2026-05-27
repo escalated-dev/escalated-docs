@@ -32,11 +32,11 @@ Escalatedは適切なデフォルト値でそのまま動作します。設定�
 
 ```bash
 # 設定ファイルの公開
-php artisan vendor:publish --tag=escalated-config
+$ php artisan vendor:publish --tag=escalated-config
 
 # カスタマイズ用のメールテンプレートの公開
-php artisan vendor:publish --tag=escalated-views
+$ php artisan vendor:publish --tag=escalated-views
 
 # マイグレーションの公開（カスタマイズが必要な場合）
-php artisan vendor:publish --tag=escalated-migrations
+$ php artisan vendor:publish --tag=escalated-migrations
 ```

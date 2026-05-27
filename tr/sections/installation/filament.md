@@ -1,14 +1,14 @@
 ## 1. Paketleri kurun
 
 ```bash
-composer require escalated-dev/escalated-laravel escalated-dev/escalated-filament
+$ composer require escalated-dev/escalated-laravel escalated-dev/escalated-filament
 ```
 
 ## 2. Escalated yükleyicisini çalıştırın
 
 ```bash
-php artisan escalated:install
-php artisan migrate
+$ php artisan escalated:install
+$ php artisan migrate
 ```
 
 ## 3. Filament eklentisini kaydedin

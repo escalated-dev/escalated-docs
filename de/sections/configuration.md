@@ -32,11 +32,11 @@ Aktuelle Plattform-Updates fügen Konfigurations- und Verwaltungsoberflächen hi
 
 ```bash
 # Konfigurationsdatei veröffentlichen
-php artisan vendor:publish --tag=escalated-config
+$ php artisan vendor:publish --tag=escalated-config
 
 # E-Mail-Vorlagen zur Anpassung veröffentlichen
-php artisan vendor:publish --tag=escalated-views
+$ php artisan vendor:publish --tag=escalated-views
 
 # Migrationen veröffentlichen (falls Anpassung nötig)
-php artisan vendor:publish --tag=escalated-migrations
+$ php artisan vendor:publish --tag=escalated-migrations
 ```

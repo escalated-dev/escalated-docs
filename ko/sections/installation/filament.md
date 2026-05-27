@@ -1,14 +1,14 @@
 ## 1. 패키지 설치
 
 ```bash
-composer require escalated-dev/escalated-laravel escalated-dev/escalated-filament
+$ composer require escalated-dev/escalated-laravel escalated-dev/escalated-filament
 ```
 
 ## 2. Escalated 인스톨러 실행
 
 ```bash
-php artisan escalated:install
-php artisan migrate
+$ php artisan escalated:install
+$ php artisan migrate
 ```
 
 ## 3. Filament 플러그인 등록

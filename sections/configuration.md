@@ -83,11 +83,11 @@ end
 
 ```bash
 # Publish config file
-php artisan vendor:publish --tag=escalated-config
+$ php artisan vendor:publish --tag=escalated-config
 
 # Publish email templates for customization
-php artisan vendor:publish --tag=escalated-views
+$ php artisan vendor:publish --tag=escalated-views
 
 # Publish migrations (if you need to customize)
-php artisan vendor:publish --tag=escalated-migrations
+$ php artisan vendor:publish --tag=escalated-migrations
 ```

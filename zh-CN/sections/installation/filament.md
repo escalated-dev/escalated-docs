@@ -1,14 +1,14 @@
 ## 1. 安装包
 
 ```bash
-composer require escalated-dev/escalated-laravel escalated-dev/escalated-filament
+$ composer require escalated-dev/escalated-laravel escalated-dev/escalated-filament
 ```
 
 ## 2. 运行Escalated安装程序
 
 ```bash
-php artisan escalated:install
-php artisan migrate
+$ php artisan escalated:install
+$ php artisan migrate
 ```
 
 ## 3. 注册Filament插件
