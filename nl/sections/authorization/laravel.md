@@ -1,4 +1,4 @@
-Define two gates in `App\Providers\AppServiceProvider::boot()` for Laravel 12+, or `App\Providers\AuthServiceProvider::boot()` for Laravel 11 and earlier:
+Definieer twee gates in `App\Providers\AppServiceProvider::boot()` voor Laravel 12+, of in `App\Providers\AuthServiceProvider::boot()` voor Laravel 11 en ouder:
 
 ```php
 use Illuminate\Support\Facades\Gate;

@@ -21,18 +21,18 @@ export default {
 }
 ```
 
-For Tailwind CSS v4+, add Escalated as a source in your app CSS file instead:
+Tailwind CSS v4+ icin Escalated i bunun yerine uygulamanizin CSS dosyasina source olarak ekleyin:
 
 ```css
 /* resources/css/app.css */
 @source '../../node_modules/@escalated-dev/escalated/src/**/*.vue';
 ```
 
-Adjust the relative path if your CSS file lives somewhere else.
+CSS dosyaniz baska bir yerdeyse goreli yolu ayarlayin.
 
 ## 3. Inertia sayfa çözümleyicisini yapılandırın
 
-This step assumes Inertia and Vue are already installed and configured.
+Bu adim Inertia ve Vue nun zaten kurulu ve yapilandirilmis oldugunu varsayar.
 
 `Escalated/` ön ekine sahip sayfalar npm paketinden çözümlenir:
 
