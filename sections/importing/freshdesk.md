@@ -28,7 +28,7 @@ The import fetches entity types in dependency order: agents → custom fields �
 ## Using the CLI
 
 ```bash
-$ php artisan escalated:import freshdesk
+php artisan escalated:import freshdesk
 ```
 
 You will be prompted for your domain and API key. Pass `--no-interaction` to read credentials from environment variables instead:
@@ -87,7 +87,7 @@ If an import job is interrupted, you can resume it from **Admin → Import** by 
 From the CLI:
 
 ```bash
-$ php artisan escalated:import freshdesk --resume=<job-id>
+php artisan escalated:import freshdesk --resume=<job-id>
 ```
 
 ## Troubleshooting

@@ -26,7 +26,7 @@ The import fetches entity types in dependency order: agents → tags → departm
 ## Using the CLI
 
 ```bash
-$ php artisan escalated:import helpscout
+php artisan escalated:import helpscout
 ```
 
 You will be prompted for your App ID and App Secret. Pass `--no-interaction` to read credentials from environment variables instead:
@@ -70,7 +70,7 @@ If an import job is interrupted, you can resume it from **Admin → Import** by 
 From the CLI:
 
 ```bash
-$ php artisan escalated:import helpscout --resume=<job-id>
+php artisan escalated:import helpscout --resume=<job-id>
 ```
 
 ## Troubleshooting

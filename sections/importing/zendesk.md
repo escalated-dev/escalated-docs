@@ -26,7 +26,7 @@ The import fetches entity types in dependency order: agents → tags → custom 
 ## Using the CLI
 
 ```bash
-$ php artisan escalated:import zendesk
+php artisan escalated:import zendesk
 ```
 
 You will be prompted for your subdomain, admin email, and API token. Pass `--no-interaction` to read credentials from environment variables instead:
@@ -77,7 +77,7 @@ If an import job is interrupted (server restart, timeout, etc.), you can resume 
 From the CLI, pass the job ID:
 
 ```bash
-$ php artisan escalated:import zendesk --resume=<job-id>
+php artisan escalated:import zendesk --resume=<job-id>
 ```
 
 ## Troubleshooting
