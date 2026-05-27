@@ -5,7 +5,7 @@ EscalatedはInertia.js + Vue 3の共通UIをnpmパッケージとして提供し
 ## 1. npmパッケージのインストール
 
 ```bash
-$ npm install @escalated-dev/escalated
+npm install @escalated-dev/escalated
 ```
 
 ## 2. Tailwindのコンテンツに追加
@@ -21,7 +21,18 @@ export default {
 }
 ```
 
+For Tailwind CSS v4+, add Escalated as a source in your app CSS file instead:
+
+```css
+/* resources/css/app.css */
+@source '../../node_modules/@escalated-dev/escalated/src/**/*.vue';
+```
+
+Adjust the relative path if your CSS file lives somewhere else.
+
 ## 3. Inertiaページリゾルバーの設定
+
+This step assumes Inertia and Vue are already installed and configured.
 
 `Escalated/`プレフィックスのページはnpmパッケージから解決されます：
 

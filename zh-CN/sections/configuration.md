@@ -32,11 +32,11 @@ Escalated开箱即用，具有合理的默认值。配置是可选的，但可�
 
 ```bash
 # 发布配置文件
-$ php artisan vendor:publish --tag=escalated-config
+php artisan vendor:publish --tag=escalated-config
 
 # 发布邮件模板以进行自定义
-$ php artisan vendor:publish --tag=escalated-views
+php artisan vendor:publish --tag=escalated-views
 
 # 发布迁移文件（如需自定义）
-$ php artisan vendor:publish --tag=escalated-migrations
+php artisan vendor:publish --tag=escalated-migrations
 ```
