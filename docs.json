@@ -91,6 +91,12 @@
             "type": "single"
         },
         {
+            "slug": "automation-types",
+            "label": "Automation Types",
+            "anchor": "automation-types",
+            "type": "single"
+        },
+        {
             "slug": "custom-ticket-actions",
             "label": "Custom Ticket Actions",
             "anchor": "custom-ticket-actions",
