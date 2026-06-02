@@ -55,6 +55,12 @@
             "type": "single"
         },
         {
+            "slug": "public-tickets",
+            "label": "Public Tickets",
+            "anchor": "public-tickets",
+            "type": "single"
+        },
+        {
             "slug": "bulk-actions",
             "label": "Bulk Actions",
             "anchor": "bulk-actions",
@@ -85,6 +91,18 @@
             "type": "single"
         },
         {
+            "slug": "automation-types",
+            "label": "Automation Types",
+            "anchor": "automation-types",
+            "type": "single"
+        },
+        {
+            "slug": "custom-ticket-actions",
+            "label": "Custom Ticket Actions",
+            "anchor": "custom-ticket-actions",
+            "type": "single"
+        },
+        {
             "slug": "automations",
             "label": "Automations",
             "anchor": "automations",
@@ -94,6 +112,12 @@
             "slug": "newsletters",
             "label": "Newsletters",
             "anchor": "newsletters",
+            "type": "single"
+        },
+        {
+            "slug": "workflows",
+            "label": "Workflows",
+            "anchor": "workflows",
             "type": "single"
         },
         {

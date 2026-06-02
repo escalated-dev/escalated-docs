@@ -32,11 +32,11 @@ Gli aggiornamenti recenti della piattaforma aggiungono schermate di configurazio
 
 ```bash
 # Pubblica il file di configurazione
-$ php artisan vendor:publish --tag=escalated-config
+php artisan vendor:publish --tag=escalated-config
 
 # Pubblica i template email per la personalizzazione
-$ php artisan vendor:publish --tag=escalated-views
+php artisan vendor:publish --tag=escalated-views
 
 # Pubblica le migrazioni (se necessario personalizzare)
-$ php artisan vendor:publish --tag=escalated-migrations
+php artisan vendor:publish --tag=escalated-migrations
 ```

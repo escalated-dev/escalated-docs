@@ -5,7 +5,7 @@ Escalated dostarcza współdzielony interfejs Inertia.js + Vue 3 jako pakiet npm
 ## 1. Zainstaluj pakiet npm
 
 ```bash
-$ npm install @escalated-dev/escalated
+npm install @escalated-dev/escalated
 ```
 
 ## 2. Dodaj do konfiguracji Tailwind
@@ -21,7 +21,18 @@ export default {
 }
 ```
 
+W Tailwind CSS v4+ dodaj zamiast tego Escalated jako source w pliku CSS aplikacji:
+
+```css
+/* resources/css/app.css */
+@source '../../node_modules/@escalated-dev/escalated/src/**/*.vue';
+```
+
+Dostosuj sciezke wzgledna, jesli plik CSS znajduje sie gdzie indziej.
+
 ## 3. Skonfiguruj resolver stron Inertia
+
+Ten krok zaklada, ze Inertia i Vue sa juz zainstalowane i skonfigurowane.
 
 Strony z prefiksem `Escalated/` są rozwiązywane z pakietu npm:
 

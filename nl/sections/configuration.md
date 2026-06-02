@@ -32,11 +32,11 @@ Recente platformupdates voegen configuratie- en beheerschermen toe voor:
 
 ```bash
 # Configuratiebestand publiceren
-$ php artisan vendor:publish --tag=escalated-config
+php artisan vendor:publish --tag=escalated-config
 
 # E-mailtemplates publiceren voor aanpassing
-$ php artisan vendor:publish --tag=escalated-views
+php artisan vendor:publish --tag=escalated-views
 
 # Migraties publiceren (als je wilt aanpassen)
-$ php artisan vendor:publish --tag=escalated-migrations
+php artisan vendor:publish --tag=escalated-migrations
 ```

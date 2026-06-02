@@ -5,7 +5,7 @@ Escalated biedt een gedeelde Inertia.js + Vue 3 UI als npm-pakket. Alle framewor
 ## 1. Installeer het npm-pakket
 
 ```bash
-$ npm install @escalated-dev/escalated
+npm install @escalated-dev/escalated
 ```
 
 ## 2. Voeg toe aan Tailwind-content
@@ -21,7 +21,18 @@ export default {
 }
 ```
 
+Voeg voor Tailwind CSS v4+ Escalated in plaats daarvan als source toe in het CSS-bestand van je app:
+
+```css
+/* resources/css/app.css */
+@source '../../node_modules/@escalated-dev/escalated/src/**/*.vue';
+```
+
+Pas het relatieve pad aan als je CSS-bestand ergens anders staat.
+
 ## 3. Configureer de Inertia-paginaresolver
+
+Deze stap gaat ervan uit dat Inertia en Vue al zijn geinstalleerd en geconfigureerd.
 
 Pagina's met het voorvoegsel `Escalated/` worden opgelost vanuit het npm-pakket:
 
