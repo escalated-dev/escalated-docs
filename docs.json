@@ -109,6 +109,12 @@
             "type": "single"
         },
         {
+            "slug": "newsletters",
+            "label": "Newsletters",
+            "anchor": "newsletters",
+            "type": "single"
+        },
+        {
             "slug": "workflows",
             "label": "Workflows",
             "anchor": "workflows",
