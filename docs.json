@@ -1,220 +1,206 @@
 {
-    "sections": [
+    "groups": [
         {
             "slug": "getting-started",
             "label": "Getting Started",
-            "anchor": "getting-started",
-            "type": "single"
-        },
-        {
-            "slug": "installation",
-            "label": "Installation",
-            "anchor": "installation",
-            "type": "tabbed"
-        },
-        {
-            "slug": "frontend-setup",
-            "label": "Frontend Setup",
-            "anchor": "frontend-setup",
-            "type": "single"
-        },
-        {
-            "slug": "theming",
-            "label": "Theming",
-            "anchor": "theming",
-            "type": "single"
-        },
-        {
-            "slug": "user-model",
-            "label": "User Model",
-            "anchor": "user-model",
-            "type": "tabbed"
-        },
-        {
-            "slug": "authorization",
-            "label": "Authorization",
-            "anchor": "authorization",
-            "type": "tabbed"
+            "description": "Install Escalated and get the support UI running in your app.",
+            "sections": [
+                { "slug": "getting-started", "label": "Getting Started", "type": "single" },
+                {
+                    "slug": "installation",
+                    "label": "Installation",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "laravel", "label": "Laravel" },
+                        { "id": "rails", "label": "Rails" },
+                        { "id": "django", "label": "Django" },
+                        { "id": "adonis", "label": "AdonisJS" },
+                        { "id": "filament", "label": "Filament" },
+                        { "id": "wordpress", "label": "WordPress" },
+                        { "id": "flutter", "label": "Flutter" },
+                        { "id": "react-native", "label": "React Native" }
+                    ]
+                },
+                { "slug": "frontend-setup", "label": "Frontend Setup", "type": "single" },
+                { "slug": "theming", "label": "Theming", "type": "single" }
+            ]
         },
         {
             "slug": "configuration",
             "label": "Configuration",
-            "anchor": "configuration",
-            "type": "single"
-        },
-        {
-            "slug": "routes",
-            "label": "Routes",
-            "anchor": "routes",
-            "type": "single"
+            "description": "Wire Escalated to your users, routes, authorization, and SSO.",
+            "sections": [
+                { "slug": "configuration", "label": "Configuration", "type": "single" },
+                { "slug": "routes", "label": "Routes", "type": "single" },
+                {
+                    "slug": "user-model",
+                    "label": "User Model",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "laravel", "label": "Laravel" },
+                        { "id": "rails", "label": "Rails" },
+                        { "id": "django", "label": "Django" },
+                        { "id": "adonis", "label": "AdonisJS" },
+                        { "id": "filament", "label": "Filament" },
+                        { "id": "wordpress", "label": "WordPress" },
+                        { "id": "flutter", "label": "Flutter" },
+                        { "id": "react-native", "label": "React Native" }
+                    ]
+                },
+                {
+                    "slug": "authorization",
+                    "label": "Authorization",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "laravel", "label": "Laravel" },
+                        { "id": "rails", "label": "Rails" },
+                        { "id": "django", "label": "Django" },
+                        { "id": "adonis", "label": "AdonisJS" },
+                        { "id": "filament", "label": "Filament" },
+                        { "id": "wordpress", "label": "WordPress" },
+                        { "id": "flutter", "label": "Flutter" },
+                        { "id": "react-native", "label": "React Native" }
+                    ]
+                },
+                { "slug": "sso", "label": "Single Sign-On", "type": "single" }
+            ]
         },
         {
             "slug": "tickets",
-            "label": "Tickets",
-            "anchor": "tickets",
-            "type": "single"
+            "label": "Tickets & Conversations",
+            "description": "The core ticketing model: tickets, replies, statuses, and SLAs.",
+            "sections": [
+                { "slug": "tickets", "label": "Tickets", "type": "single" },
+                { "slug": "public-tickets", "label": "Public Tickets", "type": "single" },
+                { "slug": "conversations", "label": "Conversations", "type": "single" },
+                { "slug": "statuses", "label": "Statuses & Priorities", "type": "single" },
+                { "slug": "slas", "label": "SLAs & Escalation", "type": "single" },
+                { "slug": "satisfaction", "label": "Satisfaction Ratings", "type": "single" },
+                { "slug": "followers", "label": "Followers", "type": "single" }
+            ]
         },
         {
-            "slug": "public-tickets",
-            "label": "Public Tickets",
-            "anchor": "public-tickets",
-            "type": "single"
+            "slug": "agent-tools",
+            "label": "Agent Tools",
+            "description": "Speed up agents with macros, bulk actions, and collaboration.",
+            "sections": [
+                { "slug": "macros", "label": "Macros", "type": "single" },
+                { "slug": "bulk-actions", "label": "Bulk Actions", "type": "single" },
+                { "slug": "custom-ticket-actions", "label": "Custom Ticket Actions", "type": "single" },
+                { "slug": "collaboration", "label": "Collaboration", "type": "single" },
+                { "slug": "keyboard-shortcuts", "label": "Keyboard Shortcuts", "type": "single" }
+            ]
         },
         {
-            "slug": "bulk-actions",
-            "label": "Bulk Actions",
-            "anchor": "bulk-actions",
-            "type": "single"
+            "slug": "automation",
+            "label": "Automation & Workflows",
+            "description": "Automate work with event workflows, time-based automations, and scheduling.",
+            "sections": [
+                { "slug": "workflows", "label": "Workflows", "type": "single" },
+                { "slug": "automations", "label": "Automations", "type": "single" },
+                { "slug": "automation-types", "label": "Automation Types", "type": "single" },
+                { "slug": "scheduling", "label": "Scheduling", "type": "single" },
+                {
+                    "slug": "events",
+                    "label": "Events",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "laravel", "label": "Laravel" },
+                        { "id": "rails", "label": "Rails" },
+                        { "id": "django", "label": "Django" },
+                        { "id": "adonis", "label": "AdonisJS" },
+                        { "id": "filament", "label": "Filament" },
+                        { "id": "wordpress", "label": "WordPress" },
+                        { "id": "flutter", "label": "Flutter" },
+                        { "id": "react-native", "label": "React Native" }
+                    ]
+                }
+            ]
         },
         {
-            "slug": "conversations",
-            "label": "Conversations",
-            "anchor": "conversations",
-            "type": "single"
+            "slug": "email",
+            "label": "Email & Notifications",
+            "description": "Inbound email, agent notifications, and customer newsletters.",
+            "sections": [
+                {
+                    "slug": "inbound-email",
+                    "label": "Inbound Email",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "laravel", "label": "Laravel" },
+                        { "id": "rails", "label": "Rails" },
+                        { "id": "django", "label": "Django" },
+                        { "id": "adonis", "label": "AdonisJS" },
+                        { "id": "filament", "label": "Filament" },
+                        { "id": "wordpress", "label": "WordPress" },
+                        { "id": "flutter", "label": "Flutter" },
+                        { "id": "react-native", "label": "React Native" },
+                        { "id": "dotnet", "label": ".NET" },
+                        { "id": "phoenix", "label": "Phoenix" },
+                        { "id": "go", "label": "Go" },
+                        { "id": "spring", "label": "Spring" },
+                        { "id": "symfony", "label": "Symfony" }
+                    ]
+                },
+                { "slug": "notifications", "label": "Notifications", "type": "single" },
+                { "slug": "newsletters", "label": "Newsletters", "type": "single" }
+            ]
         },
         {
-            "slug": "statuses",
-            "label": "Statuses & Priorities",
-            "anchor": "statuses",
-            "type": "single"
+            "slug": "api",
+            "label": "API & Data",
+            "description": "Integrate over the REST API, CLI commands, mobile SDKs, and data import.",
+            "sections": [
+                { "slug": "rest-api", "label": "REST API", "type": "single" },
+                { "slug": "commands", "label": "Management Commands", "type": "single" },
+                { "slug": "mobile-sdks", "label": "Mobile SDKs", "type": "single" },
+                {
+                    "slug": "importing",
+                    "label": "Importing Data",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "zendesk", "label": "Zendesk" },
+                        { "id": "freshdesk", "label": "Freshdesk" },
+                        { "id": "helpscout", "label": "Help Scout" },
+                        { "id": "intercom", "label": "Intercom" },
+                        { "id": "building-an-adapter", "label": "Build an Adapter" }
+                    ]
+                }
+            ]
         },
         {
-            "slug": "slas",
-            "label": "SLAs & Escalation",
-            "anchor": "slas",
-            "type": "single"
-        },
-        {
-            "slug": "macros",
-            "label": "Macros",
-            "anchor": "macros",
-            "type": "single"
-        },
-        {
-            "slug": "automation-types",
-            "label": "Automation Types",
-            "anchor": "automation-types",
-            "type": "single"
-        },
-        {
-            "slug": "custom-ticket-actions",
-            "label": "Custom Ticket Actions",
-            "anchor": "custom-ticket-actions",
-            "type": "single"
-        },
-        {
-            "slug": "automations",
-            "label": "Automations",
-            "anchor": "automations",
-            "type": "single"
-        },
-        {
-            "slug": "newsletters",
-            "label": "Newsletters",
-            "anchor": "newsletters",
-            "type": "single"
-        },
-        {
-            "slug": "workflows",
-            "label": "Workflows",
-            "anchor": "workflows",
-            "type": "single"
-        },
-        {
-            "slug": "followers",
-            "label": "Followers",
-            "anchor": "followers",
-            "type": "single"
-        },
-        {
-            "slug": "satisfaction",
-            "label": "Satisfaction Ratings",
-            "anchor": "satisfaction",
-            "type": "single"
-        },
-        {
-            "slug": "collaboration",
-            "label": "Collaboration",
-            "anchor": "collaboration",
-            "type": "single"
-        },
-        {
-            "slug": "keyboard-shortcuts",
-            "label": "Keyboard Shortcuts",
-            "anchor": "keyboard-shortcuts",
-            "type": "single"
-        },
-        {
-            "slug": "events",
-            "label": "Events",
-            "anchor": "events",
-            "type": "tabbed"
-        },
-        {
-            "slug": "scheduling",
-            "label": "Scheduling",
-            "anchor": "scheduling",
-            "type": "single"
-        },
-        {
-            "slug": "notifications",
-            "label": "Notifications",
-            "anchor": "notifications",
-            "type": "single"
-        },
-        {
-            "slug": "inbound-email",
-            "label": "Inbound Email",
-            "anchor": "inbound-email",
-            "type": "tabbed"
-        },
-        {
-            "slug": "importing",
-            "label": "Importing Data",
-            "anchor": "importing",
-            "type": "tabbed"
-        },
-        {
-            "slug": "sso",
-            "label": "Single Sign-On",
-            "anchor": "sso",
-            "type": "single"
-        },
-        {
-            "slug": "rest-api",
-            "label": "REST API",
-            "anchor": "rest-api",
-            "type": "single"
-        },
-        {
-            "slug": "commands",
-            "label": "Management Commands",
-            "anchor": "commands",
-            "type": "single"
-        },
-        {
-            "slug": "mobile-sdks",
-            "label": "Mobile SDKs",
-            "anchor": "mobile-sdks",
-            "type": "single"
-        },
-        {
-            "slug": "contributing",
-            "label": "Contributing",
-            "anchor": "contributing",
-            "type": "single"
-        },
-        {
-            "slug": "plugin-development",
-            "label": "Plugin Development",
-            "anchor": "plugin-development",
-            "type": "tabbed"
-        },
-        {
-            "slug": "compare",
-            "label": "Compare",
-            "anchor": "compare",
-            "type": "tabbed"
+            "slug": "extending",
+            "label": "Extending",
+            "description": "Build plugins, contribute, and see how Escalated compares.",
+            "sections": [
+                {
+                    "slug": "plugin-development",
+                    "label": "Plugin Development",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "getting-started", "label": "Getting Started" },
+                        { "id": "hooks", "label": "Hooks" },
+                        { "id": "pages-and-components", "label": "Pages & Components" },
+                        { "id": "endpoints-and-webhooks", "label": "Endpoints & Webhooks" },
+                        { "id": "context-api", "label": "Context API" },
+                        { "id": "framework-bridges", "label": "Framework Bridges" },
+                        { "id": "publishing", "label": "Publishing" }
+                    ]
+                },
+                { "slug": "contributing", "label": "Contributing", "type": "single" },
+                {
+                    "slug": "compare",
+                    "label": "Compare",
+                    "type": "tabbed",
+                    "tabs": [
+                        { "id": "zendesk", "label": "Zendesk" },
+                        { "id": "freshdesk", "label": "Freshdesk" },
+                        { "id": "intercom", "label": "Intercom" },
+                        { "id": "help-scout", "label": "Help Scout" },
+                        { "id": "jira-service-management", "label": "Jira Service Management" }
+                    ]
+                }
+            ]
         }
     ]
 }
