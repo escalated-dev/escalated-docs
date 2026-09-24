@@ -2,6 +2,7 @@
 
 [![Docs](https://img.shields.io/badge/docs-escalated.dev-blue)](https://escalated.dev/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Views](https://hits.sh/github.com/escalated-dev/escalated-docs.svg?style=flat&label=views&color=007ec6)](https://hits.sh/github.com/escalated-dev/escalated-docs/)
 
 This repository contains the documentation for [Escalated](https://escalated.dev), an open-source embeddable support ticket system with SLA tracking, escalation rules, agent workflows, and a customer portal.
 
