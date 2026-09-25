@@ -114,4 +114,4 @@ The `README.md` file is not pulled by the site — only `docs.json` and files in
 
 ## License
 
-MIT
+MIT - Copyright (c) Escalated.dev. See [LICENSE](LICENSE).
