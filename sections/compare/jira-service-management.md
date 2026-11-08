@@ -1,10 +1,10 @@
 # Escalated vs Jira Service Management
 
-Jira Service Management focuses on IT service management in the Atlassian ecosystem. Escalated is an MIT-licensed customer support package installed inside your application.
+Jira Service Management Cloud focuses on IT service management in the Atlassian ecosystem. Escalated is an MIT-licensed customer support package installed inside your application.
 
 ## Feature comparison
 
-| Dimension | Escalated | Jira Service Management |
+| Dimension | Escalated | Jira Service Management Cloud |
 |-----------|-----------|-----------|
 | Ticket conversations | Core package | Included in the support product |
 | Hosting and administration | Your host application and infrastructure | Vendor-managed service |
