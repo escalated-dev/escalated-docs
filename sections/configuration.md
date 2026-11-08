@@ -1,6 +1,8 @@
 # Configuration
 
-Escalated works out of the box with sensible defaults. Configuration is optional but available for customization.
+The configuration keys, routes, gates, and commands shown here describe the Laravel adapter unless a framework is named. Use your adapter source for its corresponding API and defaults.
+
+Configure the host user model, authentication, agent and admin authorization, database, frontend, and scheduled processing before deployment.
 
 > **Configuration options**
 >

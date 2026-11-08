@@ -1,5 +1,7 @@
 # Scheduling
 
+The configuration keys, routes, gates, and commands shown here describe the Laravel adapter unless a framework is named. Use your adapter source for its corresponding API and defaults.
+
 Escalated provides artisan commands for automated ticket lifecycle management. Add them to your scheduler.
 
 ```php

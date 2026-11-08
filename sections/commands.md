@@ -15,7 +15,7 @@ Run the interactive setup wizard to configure Escalated.
 | Laravel | `php artisan escalated:install` |
 | Django | `python manage.py install` |
 
-**What it does:**
+**Django installer behavior:**
 
 1. Runs pending database migrations
 2. Seeds default permissions and roles
@@ -24,7 +24,7 @@ Run the interactive setup wizard to configure Escalated.
 5. Optionally creates a superuser (interactive mode)
 6. Prints URLs for admin panel, agent dashboard, customer portal, and API
 
-Use `--no-input` for non-interactive mode (CI/CD).
+Django accepts `--no-input`. Laravel accepts Artisan's `--no-interaction`; its installer publishes config and migrations and offers additional interactive setup. Inspect `php artisan escalated:install --help` for its own options.
 
 ## Plugin Management
 
@@ -59,7 +59,7 @@ Check all open tickets for SLA breaches and send warnings.
 | Django | `python manage.py check_sla` |
 | Rails | `bundle exec rake escalated:check_sla` |
 
-Options: `--warning-threshold <minutes>` (default: 30)
+Options differ by framework. The Laravel `escalated:check-sla` command has no `--warning-threshold` option.
 
 ### evaluate-escalations
 
@@ -88,7 +88,7 @@ Auto-close tickets that have been in "resolved" status for a configurable number
 | Laravel | `php artisan escalated:close-resolved` |
 | Django | `python manage.py close_resolved` |
 
-Options: `--days <number>` (default: 7), `--dry-run`
+The Laravel command reads its age threshold from package configuration and has no `--days` or `--dry-run` option. Inspect Django command help for its options.
 
 ### poll-imap
 
@@ -107,16 +107,10 @@ Clean up expired tokens, old webhook deliveries, and stale import jobs.
 
 | Framework | Command |
 |-----------|---------|
-| Laravel | `php artisan escalated:purge-expired-data` |
+| Laravel | `php artisan escalated:purge-expired` |
 | Django | `python manage.py purge_expired_data` |
 
-Options: `--days <number>` (default: 30), `--dry-run`
-
-**Purges:**
-
-- Expired API tokens
-- Webhook delivery records older than N days
-- Failed/abandoned import jobs older than 7 days
+Laravel uses the configured retention policies and supports `--dry-run` and `--force`. It purges closed tickets, attachments, and audit logs, with the configured deletion/grace behavior. Django has its own cleanup command and options.
 
 ### purge-activities
 
@@ -127,7 +121,7 @@ Delete old ticket activity log entries beyond a retention period.
 | Laravel | `php artisan escalated:purge-activities` |
 | Django | `python manage.py purge_activities` |
 
-Options: `--days <number>` (default: 90), `--dry-run`
+Laravel accepts `--days` to override the configured retention period (default 90 days). It does not provide a dry-run option. Inspect the Django command help before running cleanup.
 
 ### seed-permissions
 
@@ -148,4 +142,4 @@ Import tickets and data from external platforms.
 | Laravel | `php artisan escalated:import` |
 | Django | `python manage.py escalated_import` |
 
-Supported platforms: Zendesk, Freshdesk, Intercom, Help Scout. See [Importing Data](/importing) for details.
+Supported platforms: Zendesk, Freshdesk, Intercom, Help Scout. See [Importing Data](/docs/importing) for details.

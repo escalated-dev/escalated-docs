@@ -1,6 +1,6 @@
 # Workflows
 
-Workflows are event-driven automation rules that run in response to ticket lifecycle events (new ticket, status change, SLA breach, inbound reply, etc.). Unlike [automations](automations.md), which run on a recurring scheduler, workflows fire **the moment the triggering event happens** -- an agent assigning a ticket, a customer replying, an SLA tipping over.
+Workflows are event-driven automation rules that run in response to ticket lifecycle events (ticket creation, updates, assignment, status changes, and replies). Unlike [automations](automations.md), which run on a recurring scheduler, workflows fire **the moment the triggering event happens** when a supported ticket event is dispatched.
 
 Use workflows when you want reactive side effects. Use automations when you want periodic sweeps of the ticket database.
 
@@ -8,9 +8,9 @@ Use workflows when you want reactive side effects. Use automations when you want
 
 Every workflow has three parts:
 
-1. **Trigger event** -- the event that starts evaluation (e.g. `ticket.created`, `reply.created`, `sla.breached`).
-2. **Conditions** -- a filter evaluated on the ticket when the event fires. All conditions must match (AND logic).
-3. **Actions** -- the side effects applied when conditions match. Actions run in order; a failure in one does not abort the rest (the error is logged to the workflow run history).
+1. **Trigger event** -- the event that starts evaluation (e.g. `ticket.created` or `reply.created`).
+2. **Conditions** -- a filter evaluated on the ticket when the event fires. Conditions can be grouped with `all` (AND) or `any` (OR).
+3. **Actions** -- the side effects applied when conditions match. Actions run in order; error handling and log detail depend on the backend executor.
 
 When an event fires, Escalated dispatches it to the workflow engine, which looks up every active workflow subscribed to that event, evaluates conditions against the current ticket state, and executes each matched workflow's actions. The run is recorded in the workflow log for auditability.
 
@@ -30,7 +30,7 @@ Fine-grained event subtypes (priority changed, tagged, reopened, SLA warnings, i
 
 ## Conditions
 
-A condition is a `{ field, operator, value }` triple. `field` names any top-level ticket column (framework-specific column names apply — see [Template variables](#template-variables) for the naming convention on your framework). The engine looks up `ticket[field]`, coerces to string, and applies `operator` against `value`.
+A condition is a `{field, operator, value}` triple. The canonical admin contract includes `status`, `priority`, `ticket_type`, `channel`, `subject`, `description`, `tags`, `department_id`, `assigned_to`, `hours_since_created`, and `hours_since_updated`. A backend may advertise additional fields.
 
 **Operators:**
 
@@ -56,11 +56,9 @@ A condition is a `{ field, operator, value }` triple. `field` names any top-leve
 
 Conditions combine via `all` (AND) or `any` (OR); a bare array is treated as `all`. If you need disjoint OR-semantics, define separate workflows on the same trigger with different condition sets.
 
-> **Scope of accessible fields.** The engine flattens the ticket entity into a string map of top-level scalar columns only (id, referenceNumber, subject, description, priority, channel, statusId, departmentId, requesterId, assigneeId, contactId, …). Relationship data (`tags`, joined `Department`, joined `Contact.email`) is **not** in the map, so filters like "has tag vip" or "requester email ends with @foo.com" don't work out-of-the-box. If you need those, either (a) denormalize the field you care about onto the ticket (e.g. a `customer_tier` column populated at creation) or (b) use a first-pass workflow to tag the ticket, then filter downstream workflows by the new scalar-populated state.
-
 ## Actions
 
-Workflows can perform any of the following actions. Actions execute in the order they are declared:
+The core action catalog includes priority, status, department, tag, assignment, note, and canned-reply changes. The table below also lists deferred actions from the NestJS reference implementation; confirm them in your backend executor before using them. Actions execute in declaration order:
 
 | Action | Purpose |
 |---|---|
@@ -74,8 +72,8 @@ Workflows can perform any of the following actions. Actions execute in the order
 | `add_note` | Add an internal note visible only to agents |
 | `insert_canned_reply` | Add a public reply with `{{field}}` template interpolation |
 | `add_follower` | Add a user as a ticket follower (idempotent) |
-| `send_webhook` | POST a JSON payload to a configured webhook |
-| `delay` | Pause the workflow and resume remaining actions after N seconds (see below) |
+| `send_webhook` | Optional: send to a URL, when advertised by the backend |
+| `delay` | Optional: defer remaining actions by a number of minutes |
 
 ### Template variables
 
@@ -99,52 +97,11 @@ Unknown variable names are left as literal `{{name}}` in the output so gaps are 
 
 ### Delayed actions
 
-The `delay` action splits a workflow run into two halves. Actions before the delay run inline. Remaining actions are persisted to a deferred-job queue with `run_at = now + N` and picked up by a scheduled poller (runs once per minute by default) after the wait elapses.
-
-**`N` units differ by framework.** NestJS, Spring, and WordPress interpret `delay.value` as **seconds**; Laravel, Rails, Django, Adonis, .NET, Go, Phoenix, and Symfony interpret it as **minutes** (matching the pre-existing `delayed_actions` schema those plugins had before this rollout). Check your plugin's workflow-executor source if you're unsure.
-
-Example: "When a ticket is created by a caller from an urgent priority, tag it, wait 5 minutes, then leave a note to page on-call."
-
-```json
-{
-  "trigger_event": "ticket.created",
-  "conditions": [
-    { "field": "priority", "operator": "equals", "value": "urgent" }
-  ],
-  "actions": [
-    { "type": "add_tag",  "value": "needs-fast-response" },
-    { "type": "delay",    "value": "300" },
-    { "type": "add_note", "value": "Still open after 5 min -- page on-call." }
-  ]
-}
-```
-
-> `"value": "300"` is 5 minutes on the seconds-unit frameworks (NestJS / Spring / WordPress). On the minutes-unit frameworks you'd write `"value": "5"` for the same behavior.
-
-The first two actions happen immediately. If the ticket is still open 5 minutes later, the note is added; if the ticket was already closed in the meantime, the note still fires (the delay does not re-evaluate conditions -- it resumes the saved action sequence verbatim). To make conditional resume-time behavior, fan out to a separate workflow trigger.
-
-The deferred-job queue retains rows after completion (status flips from `pending` to `done` or `failed`) so you can audit when and why each delay fired.
+The canonical admin contract defines `delay.value` in minutes. Delayed actions are optional: use them only when your backend advertises `delay` in its action types. Run the required scheduler before enabling a delayed rule.
 
 ## Webhook action
 
-`send_webhook` takes a webhook id (the numeric id of a row you've configured under `Admin -> Webhooks`) and POSTs a payload to that webhook's configured URL. The HTTP body:
-
-```json
-{
-  "event": "workflow.triggered",
-  "data": {
-    "ticket": { "id": 1234, "subject": "...", "priority": "high", ... }
-  },
-  "timestamp": "2026-04-24T14:00:00.000Z"
-}
-```
-
-The full ticket entity is passed through as `data.ticket` — relationships present on the in-memory entity at dispatch time (tags, department) are included. Delivery follows the same HMAC-SHA256 signing + retry rules as every other Escalated webhook. Each request carries two headers:
-
-- `X-Escalated-Signature`: the hex-encoded HMAC-SHA256 of the raw payload body, using the webhook's configured secret. Verify on your side by recomputing `hex(hmac_sha256(secret, body))` and comparing with a timing-safe equality check.
-- `X-Escalated-Event`: the event name (`workflow.triggered` for this action; other events use their own names).
-
-Delivery failures are recorded on `WebhookDelivery` for the retry scheduler to pick up; they do not block subsequent actions in the same workflow.
+The canonical admin contract defines `send_webhook.value` as a URL. This action is optional and should only appear when the backend advertises it. Configure and test the backend's URL validation, delivery, signing, and retry behavior before connecting an external receiver.
 
 ## Example workflows
 
@@ -161,13 +118,13 @@ Delivery failures are recorded on `WebhookDelivery` for the retry scheduler to p
   "actions": [
     { "type": "change_priority",      "value": "high" },
     { "type": "add_tag",              "value": "billing" },
-    { "type": "assign_round_robin",   "value": "7" },
-    { "type": "send_webhook",         "value": "9" }
+    { "type": "assign_agent",         "value": "7" },
+    { "type": "send_webhook",         "value": "https://example.com/support-events" }
   ]
 }
 ```
 
-The `assign_round_robin` value `"7"` is the id of the Billing department; `"send_webhook"` value `"9"` is the id of a webhook you've configured under `Admin → Webhooks` (typically pointing at PagerDuty or similar).
+The optional assignment and webhook actions in this example require support in the installed backend. The assignment value identifies a host agent.
 
 ### Chase stale tickets
 
@@ -178,13 +135,13 @@ The `assign_round_robin` value `"7"` is the id of the Billing department; `"send
     { "field": "status", "operator": "equals", "value": "pending" }
   ],
   "actions": [
-    { "type": "delay", "value": "86400" },
+    { "type": "delay", "value": "1440" },
     { "type": "add_note", "value": "Pending > 24h. Consider following up." }
   ]
 }
 ```
 
-> `"value": "86400"` is 24h on the seconds-unit frameworks; on minutes-unit frameworks use `"value": "1440"`.
+`1440` minutes is 24 hours. A delayed action resumes saved work; use a time-based automation when the ticket must still match conditions at execution time.
 
 ### Triage by subject
 
@@ -207,7 +164,7 @@ The canned-reply template uses `{{referenceNumber}}` because the NestJS referenc
 
 ## Workflow logs
 
-Every workflow *considered* -- match or no match -- writes a row to `escalated_workflow_logs`, surfaced in the UI at `Admin -> Workflows -> Logs`. Each row records:
+In the NestJS reference implementation, every workflow *considered* -- match or no match -- writes a row to `escalated_workflow_logs`, surfaced in the UI at `Admin -> Workflows -> Logs`. Each row records:
 
 - Trigger event string, triggering ticket id (FK), workflow id (FK)
 - `conditions_matched` boolean — whether the workflow actually fired

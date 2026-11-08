@@ -2,7 +2,7 @@
 
 > **Note:** Frontend setup is only required when the built-in UI is enabled (`ui.enabled = true`, the default). If you are running Escalated in headless mode, skip this section entirely.
 
-Escalated ships a shared Inertia.js + Vue 3 UI as an npm package. All frameworks use the same frontend.
+Escalated ships a shared Inertia.js + Vue 3 UI as an npm package. Most web adapters use this frontend. WordPress and Filament use their native interfaces; mobile clients have separate setup.
 
 ## 1. Install the npm package
 
@@ -39,13 +39,13 @@ Escalated's Vue components are written with Tailwind utility classes, so **some 
 
 #### Option A: Tailwind Play CDN (zero build)
 
-Best for prototyping and internal tools. Drop this `<script>` into the page that hosts Escalated:
+Use only for local prototyping. Drop this `<script>` into the page that hosts Escalated:
 
 ```html
 <script src="https://cdn.tailwindcss.com"></script>
 ```
 
-The CDN JIT-compiles classes at runtime. **Trade-offs:** ~3 MB script tag, no class purging, slight FOUC. Not recommended for high-traffic production traffic.
+The CDN JIT-compiles classes at runtime. Use a compiled stylesheet for production.
 
 #### Option B: Tailwind standalone CLI (no npm needed)
 

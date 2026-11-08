@@ -1,5 +1,7 @@
 # Routes
 
+The configuration keys, routes, gates, and commands shown here describe the Laravel adapter unless a framework is named. Use your adapter source for its corresponding API and defaults.
+
 Escalated registers three groups of routes under the configured prefix (default: `/support`).
 
 > **Note:** The routes listed below are only registered when the UI is enabled. In headless mode (`ui.enabled = false`), only API routes, inbound email webhooks, and plugin endpoints are available.

@@ -36,7 +36,7 @@ Escalated plugins are standard npm packages. The recommended structure separates
     "dev": "tsc --watch"
   },
   "peerDependencies": {
-    "@escalated-dev/plugin-sdk": "^1.0.0"
+    "@escalated-dev/plugin-sdk": "^0.1.0"
   }
 }
 ```

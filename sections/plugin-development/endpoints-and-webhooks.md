@@ -35,17 +35,23 @@ The `req` object contains `body`, `params` (URL path parameters), `query` (query
 
 ## Webhook handlers
 
-Webhooks receive inbound HTTP requests from external services. Unlike endpoints, webhooks are public routes — no Escalated authentication is required. Signature verification is the plugin's responsibility within the handler.
+Webhooks receive inbound HTTP requests from external services. Unlike endpoints, webhooks are public routes — no Escalated authentication is required. Signature and timestamp verification are the plugin's responsibility. Require a compatible host bridge that supplies exact `rawBody` bytes and understands the explicit HTTP response envelope. Never reconstruct signed bytes from parsed JSON.
 
 Webhook routes are mounted at `/webhooks/plugins/{slug}{path}`.
 
 ```typescript
 webhooks: {
   'POST /events': async (ctx, req) => {
-    // Verify Slack signature
-    const signature = req.headers['x-slack-signature']
-    if (!verifySlackSignature(signature, req.body)) {
-      return { error: 'Invalid signature' }  // Bridge returns 401
+    // The host must supply exact raw bytes and the version 1 HTTP contract.
+    // verifyProviderRequest is your provider-specific verification function.
+    if (!req.rawBody || !verifyProviderRequest(req.headers, req.rawBody)) {
+      return {
+        __escalated_http: 1,
+        status: 401,
+        headers: {},
+        format: 'json',
+        body: { error: 'Invalid signature' },
+      }
     }
 
     const payload = req.body

@@ -1,6 +1,6 @@
 # Mobile SDKs
 
-Escalated provides pre-built mobile SDKs for Flutter and React Native. Both SDKs offer a complete customer-facing support experience that connects to any Escalated backend via the REST API.
+Escalated provides pre-built mobile SDKs for Flutter and React Native. They are customer-facing clients. The Laravel backend provides the mobile API contract; test endpoint, payload, authentication, and guest-access compatibility before using another backend.
 
 ## Features
 
@@ -23,7 +23,9 @@ Both SDKs include:
 ```yaml
 # pubspec.yaml
 dependencies:
-  escalated: ^1.0.0
+  escalated:
+    git:
+      url: https://github.com/escalated-dev/escalated-flutter.git
 ```
 
 ### Usage
@@ -33,11 +35,11 @@ import 'package:escalated/escalated.dart';
 
 // Configure the SDK
 final config = EscalatedConfig(
-  baseUrl: 'https://yourapp.com/support/api/v1',
+  apiBaseUrl: 'https://yourapp.com/support/api/v1/mobile',
 );
 
 // Use the pre-built widget
-EscalatedApp(config: config)
+EscalatedPlugin(config: config, child: MyApp())
 ```
 
 ### Auth Hooks
@@ -76,8 +78,13 @@ class CustomAuthHooks extends DefaultAuthHooks {
 ### Installation
 
 ```bash
-npm install @escalated-dev/escalated-react-native
+git clone https://github.com/escalated-dev/escalated-react-native.git
+cd escalated-react-native
+npm install
+npm run typecheck
 ```
+
+Install the local source package in your app and install its peer dependencies.
 
 ### Usage
 
@@ -87,7 +94,7 @@ import { EscalatedProvider } from '@escalated-dev/escalated-react-native';
 function App() {
   return (
     <EscalatedProvider
-      baseUrl="https://yourapp.com/support/api/v1"
+      config={{ apiBaseUrl: "https://yourapp.com/support/api/v1/mobile" }}
     >
       {/* Your app content, or use the pre-built navigator */}
     </EscalatedProvider>

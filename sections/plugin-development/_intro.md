@@ -1,6 +1,6 @@
 # Plugin Development
 
-Escalated's Plugin SDK (`@escalated-dev/plugin-sdk`) lets you extend the platform with custom integrations, UI components, and automation — written once in TypeScript and running across every Escalated backend framework.
+Escalated's Plugin SDK (`@escalated-dev/plugin-sdk`) lets you extend the platform with custom integrations, UI components, and automation — written in TypeScript. Compatibility depends on the backend bridge, runtime, hook, and installed versions.
 
 ## What plugins can do
 
@@ -15,7 +15,7 @@ Escalated's Plugin SDK (`@escalated-dev/plugin-sdk`) lets you extend the platfor
 
 ## Architecture
 
-The SDK is built on the Grafana/HashiCorp subprocess model. Plugins run as a single shared Node.js process (`@escalated-dev/plugin-runtime`), communicating with the host framework over JSON-RPC 2.0 via stdio. This means your TypeScript plugin code runs on every backend — Laravel, Django, Rails, and AdonisJS — without modification.
+The SDK is built on the Grafana/HashiCorp subprocess model. Plugins run as a single shared Node.js process (`@escalated-dev/plugin-runtime`), communicating with the host framework over JSON-RPC 2.0 via stdio. Compatible bridges connect the runtime to host services. Test the hooks and context methods your plugin needs on the target backend.
 
 ```
 Host Framework (any)              Plugin Process (Node.js)
@@ -33,18 +33,11 @@ Host Framework (any)              Plugin Process (Node.js)
 
 Each framework has a thin native **bridge package** that spawns the runtime, reads the plugin manifest, registers routes and menu items, and proxies `ctx.*` calls (database queries, config reads, broadcasts) back from the plugin process to the host ORM.
 
-| Package | Registry | Purpose |
-|---------|----------|---------|
-| `@escalated-dev/plugin-sdk` | npm | Plugin authoring SDK — `definePlugin()`, types, runtime |
-| `@escalated-dev/plugin-runtime` | npm | Process host — loads plugins, handles JSON-RPC |
-| `escalated/plugin-bridge` | Composer | Laravel bridge |
-| `escalated-plugin-bridge` | PyPI | Django bridge |
-| `escalated-plugin-bridge` | RubyGems | Rails bridge |
-| `@escalated-dev/plugin-bridge` | npm | AdonisJS bridge (in-process) |
+Use the SDK and runtime source repositories and the bridge included in the target backend. A repository or package manifest does not establish registry availability.
 
 ### AdonisJS in-process mode
 
-On AdonisJS, plugins are loaded directly via `require()` — no subprocess, no JSON-RPC. The same `PluginContext` interface is used, but the implementation calls Lucid ORM directly. Plugin behavior is identical across modes; the `PluginContext` contract guarantees this.
+On AdonisJS, plugins are loaded directly via `require()` — no subprocess, no JSON-RPC. The same `PluginContext` interface is used, but the implementation calls Lucid ORM directly. The shared types describe the interface; they do not prove equal bridge behavior across backends. Generic plugin execution is disabled in Laravel tenant mode.
 
 ## Quick start
 

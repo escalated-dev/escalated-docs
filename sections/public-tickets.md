@@ -2,7 +2,7 @@
 
 The public ticket system lets unauthenticated users submit tickets without a host-app account. Two entry points share the same pipeline:
 
-- **Embeddable widget** — a support button you drop into marketing pages. The widget POSTs to the host framework's widget-tickets route (`/escalated/widget/tickets` on NestJS; `/support/widget/tickets` on every other framework).
+- **Embeddable widget** — a support button you drop into marketing pages. The widget POSTs to the host framework's widget-tickets route (`/escalated/widget/tickets` on NestJS; the configured widget route on the other adapters).
 - **Inbound email** — a Postmark/Mailgun/SES webhook that routes messages to the right ticket. The endpoint path is framework-specific — see [Inbound Email](inbound-email.md) for the URL shape your plugin uses.
 
 Both paths look up or create a `Contact` by email, so repeat submissions from the same address are deduplicated. Once a contact exists, they can reply to confirmation emails and those replies thread back into the same conversation via RFC 5322 `Message-ID` + a signed `Reply-To` address.
@@ -93,11 +93,11 @@ Place the widget snippet on any page. Config is read from `data-*` attributes on
 
 Only `data-base-url` is required; `data-color` (hex, defaults to indigo `#4F46E5`) and `data-position` (`bottom-right` | `bottom-left`, defaults to `bottom-right`) are optional. The widget mounts itself into a shadow-DOM host so host-app CSS can't leak in.
 
-**For NestJS backends, add one more attribute:** `data-widget-path="/escalated/widget"`. The NestJS reference mounts its WidgetController at `/escalated/widget` (not `/support/widget` like every other host adapter), so embedders need to tell the shared widget which prefix to use. Every non-NestJS backend works with the default and doesn't need this attribute.
+**For NestJS backends, add one more attribute:** `data-widget-path="/escalated/widget"`. The NestJS reference mounts its WidgetController at `/escalated/widget` (not `/support/widget` like every other host adapter), so embedders need to tell the shared widget which prefix to use. Confirm the installed backend route prefix before embedding the widget.
 
 On open, the widget optionally fetches `<widget-path>/config` (host-framework-dependent — some plugins implement this to serve admin-configured branding overrides, others fall back to the `data-*` attributes) and renders a ticket form collecting `email` (required), `name` (optional), `subject`, `description`, and an optional `priority`. On submit it POSTs to `<widget-path>/tickets` on the host framework.
 
-Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottleGuard`. Requests exceeding the limit get a `429` and no ticket is created.
+In the NestJS reference implementation, `PublicSubmitThrottleGuard` limits submissions per email. Confirm the configured limits and storage on the installed version. Requests exceeding the limit get a `429` and no ticket is created.
 
 > **Deployment note:** The shipped guard keeps its counter in-memory, which is fine for single-instance deployments and tests but lets the limit leak under horizontal scale-out. For multi-instance production, swap the backing store for Redis (or your framework's equivalent shared cache). The guard is a pluggable class — override it when you bind the Escalated module.
 
@@ -105,25 +105,9 @@ Per-email rate limit: 10 submissions per hour, enforced by `PublicSubmitThrottle
 
 Point your transactional mail provider's inbound webhook at your plugin's inbound-email endpoint. The exact path depends on the framework (NestJS: `/escalated/webhook/email/inbound`; Laravel: `/support/inbound/{adapter}`; others vary). Provider coverage varies too:
 
-| Provider | NestJS + greenfield plugins¹ | Legacy plugins² |
-|---|:---:|:---:|
-| Postmark | ✅ | ✅ |
-| Mailgun | ✅ | ✅ |
-| AWS SES (via SNS HTTP) | ✅ | — |
+Provider coverage differs by adapter. See [Inbound Email](inbound-email.md) for per-framework setup details.
 
-¹ `escalated-nestjs`, `escalated-dotnet`, `escalated-spring`, `escalated-go`, `escalated-phoenix`, `escalated-symfony`
-² `escalated-laravel`, `escalated-rails`, `escalated-django`, `escalated-adonis`, `escalated-wordpress`
-
-See [Inbound Email](inbound-email.md) for per-framework setup details.
-
-The inbound router resolves the target ticket in this order:
-
-1. **`In-Reply-To` header** → ticket id parsed from our outbound `Message-ID`
-2. **`References` header** → same parse, walks the whole chain for clients that drop `In-Reply-To`
-3. **Envelope `To`** → matches our signed `Reply-To` address `reply+{id}.{hmac8}@{domain}` (HMAC-SHA256, timing-safe compare)
-4. **Subject line** → contains a `[TK-XXX]` ticket reference
-
-If none match, the router resolves/creates a `Contact` by sender email and creates a new ticket under the current guest policy.
+With an inbound secret configured, only the signed Reply-To identifies a ticket. Header and subject matching are compatibility fallbacks when no secret is configured. A reply is accepted only from the ticket requester and is posted as that requester. Other senders create new tickets.
 
 ## Workflow integration
 
@@ -131,7 +115,7 @@ Public-submission events fire the same `ticket.created` and `reply.created` even
 
 - **Auto-tag all public tickets** with a `from-widget` or `from-email` tag so agents can filter the queue
 - **Assign public tickets to a specific department** (e.g. Billing) when the subject contains keywords
-- **Delay auto-close** — close tickets after 7 days of no response using a `delay` action on `reply.created`
+- **Close inactive tickets** — use a time-based Automation that evaluates the ticket at execution time
 
 See the [Workflows](workflows.md) page for the full action catalog and decision table.
 

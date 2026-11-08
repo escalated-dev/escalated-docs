@@ -1,5 +1,7 @@
 # Automations
 
+The condition and action names below describe the Laravel AutomationRunner. Other adapters must be checked separately.
+
 Automations are **admin-configured, time-based rules** that run on a recurring schedule and update tickets automatically. They are designed for things you can't react to with an event — for example, "close any ticket that's been waiting more than 7 days." Silence has no trigger, so a [Workflow](workflows.md) can't handle this case; an Automation can.
 
 > **Picking the right tool:** Escalated has three automation surfaces — [Workflows](workflows.md) (admin, event-driven), Automations (admin, time-based), and [Macros](macros.md) (agent, manual). See [Workflows, Automations, and Macros](automation-types.md) for the comparison and a decision tree.
@@ -12,9 +14,9 @@ Each automation has three parts:
 
 1. **Conditions** -- criteria a ticket must match for the automation to fire
 2. **Actions** -- changes applied to matching tickets
-3. **Schedule** -- how often the automation runs (e.g., every 15 minutes, hourly, daily)
+3. **Scheduler** -- how often the host runs the automation command
 
-When the scheduler ticks, Escalated evaluates every active automation against all tickets. Tickets that satisfy all conditions receive the configured actions.
+When the scheduler ticks, Escalated evaluates every active automation against open tickets. Tickets that satisfy all conditions receive the configured actions.
 
 ## Available conditions
 
@@ -25,26 +27,22 @@ Combine any of the following conditions. All conditions use AND logic -- every c
 - **ticket_type** -- ticket type is question, problem, incident, or task
 - **subject_contains** -- ticket subject includes a keyword or phrase
 - **assigned** -- ticket is assigned to any agent (or a specific agent)
-- **unassigned** -- ticket has no agent assigned
-- **department** -- ticket belongs to a specific department
-- **tags** -- ticket has (or does not have) specific tags
-- **created_before** -- ticket was created before a relative time (e.g., 48 hours ago)
-- **created_after** -- ticket was created after a relative time
-- **sla_breached** -- ticket has breached its SLA first-response or resolution target
+- **assigned** -- use `unassigned` or `assigned` as the value
+- **department_id** -- ticket belongs to a specific department
+
+- **hours_since_created** -- age threshold in hours
+- **hours_since_updated** -- time since last update
+- **hours_since_assigned** -- approximates assignment age using updated_at on assigned tickets
 
 ## Available actions
 
 Each automation can perform one or more actions in order:
 
-- **set_status** -- change the ticket status
-- **set_priority** -- change the ticket priority
+- **change_status** -- change the ticket status
+- **change_priority** -- change the ticket priority
 - **set_ticket_type** -- change the ticket type
-- **assign_to** -- assign the ticket to a specific agent
+- **assign** -- assign the ticket to a specific agent
 - **add_tag** -- add a tag to the ticket
-- **remove_tag** -- remove a tag from the ticket
-- **send_notification** -- send an email notification to the requester, assigned agent, or a custom address
-- **close** -- close the ticket
-- **escalate** -- escalate the ticket according to the configured escalation rules
 
 ## Example: auto-categorization
 
@@ -59,7 +57,7 @@ This keeps your reporting accurate without requiring agents to manually triage e
 
 ## Managing automations
 
-Admins create and edit automations from `Admin -> Automations`. The builder interface lets you add conditions and actions visually, toggle automations on or off, and set the run frequency.
+Admins create and edit automations from `Admin -> Automations`. The builder interface lets you add conditions and actions visually, toggle automations on or off, and configure your host scheduler.
 
 ## Scheduler setup
 

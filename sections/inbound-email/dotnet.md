@@ -30,11 +30,11 @@ Escalated__Mail__Domain=support.yourapp.com
 Escalated__Mail__InboundSecret=a-long-random-value
 ```
 
-The `InboundSecret` is symmetric — it's used to sign outbound `Reply-To` addresses *and* to verify inbound webhook requests, so forged emails that target a stolen reply address are rejected via timing-safe HMAC comparison.
+The `InboundSecret` is symmetric — it's used to sign outbound `Reply-To` addresses *and* to verify inbound webhook requests, and the webhook receiver compares the shared-secret header separately. Signed reply addresses identify tickets; they do not establish the sender identity.
 
 ### Provider setup
 
-Each provider signs its webhook and expects you to forward that signature via the `X-Escalated-Inbound-Secret` header.
+The receiver compares `X-Escalated-Inbound-Secret` with the configured shared secret. This header carries the shared value, not a provider signature or a payload HMAC. Use HTTPS and a trusted forwarding service if your provider cannot attach the header.
 
 **Postmark** — in your server settings under *Inbound → Webhook URL*:
 
@@ -50,7 +50,7 @@ Add a custom header `X-Escalated-Inbound-Secret: <your secret>`.
 https://yourapp.com/support/webhook/email/inbound?adapter=mailgun
 ```
 
-Set the HMAC header the same way.
+Have your trusted forwarding service attach the configured shared-secret header.
 
 ### Testing
 

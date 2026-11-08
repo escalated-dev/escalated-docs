@@ -1,8 +1,12 @@
 ## 1. Install the plugin
 
 ```bash
-$ wp plugin install escalated --activate
+git clone https://github.com/escalated-dev/escalated-wordpress.git escalated
+cd escalated
+composer install --no-dev
 ```
+
+Place the resulting folder in `wp-content/plugins/escalated` and activate it in WordPress. The source plugin requires WordPress 6.0+ and PHP 8.1+. The WordPress.org directory install shortcut is not available.
 
 ## 2. Configure settings
 
