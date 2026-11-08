@@ -1,5 +1,7 @@
 # REST API
 
+The endpoints and defaults below describe the Laravel adapter. Mobile customer endpoints are a separate contract; other adapters have their own routes and authentication requirements.
+
 Escalated includes a full REST API for programmatic access to tickets, agents, departments, and more.
 
 > **Headless mode** -- The REST API works independently of the UI setting and is fully functional in headless deployments. It is the recommended interface for building custom frontends.
@@ -15,7 +17,7 @@ Authorization: Bearer your-api-token
 Tokens are created in the admin panel under **API Tokens**. Each token has:
 
 - **Name** — descriptive label
-- **Abilities** — granular permissions (e.g. `tickets:read`, `tickets:write`)
+- **Abilities** — granular permissions (e.g. `agent`, `admin`)
 - **Expiration** — optional expiry date
 
 ### Validate a token
@@ -43,7 +45,7 @@ All endpoints are prefixed with your configured API prefix (default: `/support/a
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/tickets` | List tickets (paginated, filterable) |
-| `POST` | `/tickets/create` | Create a new ticket |
+| `POST` | `/tickets` | Create a new ticket |
 | `GET` | `/tickets/{reference}` | Ticket detail with replies and activities |
 | `POST` | `/tickets/{reference}/reply` | Add reply or internal note |
 | `PATCH` | `/tickets/{reference}/status` | Change ticket status |
@@ -65,14 +67,7 @@ All endpoints are prefixed with your configured API prefix (default: `/support/a
 | `GET` | `/macros` | List available macros |
 | `GET` | `/realtime/config` | WebSocket/realtime configuration |
 
-### Admin: API Tokens
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/admin/api-tokens` | List tokens |
-| `POST` | `/admin/api-tokens/create` | Create token |
-| `PATCH` | `/admin/api-tokens/{id}/update` | Update token |
-| `DELETE` | `/admin/api-tokens/{id}/delete` | Delete token |
+Token management uses the authenticated admin interface; it is not provided by the agent API routes listed above.
 
 ## Filtering & Pagination
 
@@ -91,23 +86,22 @@ All endpoints are prefixed with your configured API prefix (default: `/support/a
 | `following` | boolean | `1` or `true` for tickets you follow |
 | `sort_by` | string | Sort field: `created_at`, `updated_at`, `priority`, `status`, `subject` |
 | `sort_dir` | string | `asc` or `desc` (default: `desc`) |
-| `per_page` | integer | Results per page, max 100 (default: 25) |
+| `per_page` | integer | Results per page, max 100 (default: 15) |
 | `page` | integer | Page number (default: 1) |
 
 ## Response Format
 
-All responses follow the same envelope:
+List responses include `data` and pagination `meta`. Detail responses include `data`; mutations can also include a `message`. The following is an illustrative list response:
 
 ```json
 {
-  "data": { ... },
+  "data": [],
   "meta": {
     "current_page": 1,
     "last_page": 5,
     "per_page": 25,
     "total": 100
-  },
-  "message": "Ticket created."
+  }
 }
 ```
 
@@ -117,7 +111,7 @@ All responses follow the same envelope:
 {
   "message": "Validation failed.",
   "errors": {
-    "subject": "Subject is required."
+    "subject": ["Subject is required."]
   }
 }
 ```
@@ -135,7 +129,7 @@ All responses follow the same envelope:
 
 ## Rate Limiting
 
-API requests are rate-limited per token (default: 60 requests per minute). Rate limit headers are included in every response:
+API requests are rate-limited per token (default: 60 requests per minute). Requests passing API authentication receive rate-limit headers:
 
 ```
 X-RateLimit-Limit: 60

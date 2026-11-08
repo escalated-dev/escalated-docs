@@ -1,8 +1,13 @@
 ## 1. Install the package
 
 ```bash
-$ npm install @escalated-dev/escalated-react-native
+git clone https://github.com/escalated-dev/escalated-react-native.git
+cd escalated-react-native
+npm install
+npm run typecheck
 ```
+
+Install the local source package into your app. The source package is not published on npm.
 
 ## 2. Install peer dependencies
 

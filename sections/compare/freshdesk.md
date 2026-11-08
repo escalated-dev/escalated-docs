@@ -1,106 +1,41 @@
 # Escalated vs Freshdesk
 
-Freshdesk by Freshworks is a popular cloud-based helpdesk known for its free tier and approachable pricing. Escalated offers a similar breadth of features as a fully open-source, self-hosted solution that integrates directly into your application — with no agent limits on any feature.
+Freshdesk provides a hosted support platform. Escalated is an MIT-licensed support package installed inside your own application, without core per-agent licence fees.
 
 ## Feature comparison
 
-| Feature | Escalated | Freshdesk |
-|---------|-----------|-----------|
-| **Core Ticketing** | | |
-| Ticket management | ✓ | ✓ |
-| Assignment & routing | ✓ | ✓ |
-| Ticket merging | ✓ | ✓ |
-| Ticket linking | ✓ | ✓ (Growth+) |
-| Bulk actions | ✓ | ✓ |
-| Custom statuses | ✓ | ✓ |
-| Custom fields | ✓ | ✓ |
-| Tags | ✓ | ✓ |
-| **Agent Tools** | | |
-| Macros | ✓ | ✓ (canned responses) |
-| Canned responses | ✓ | ✓ |
-| Collision detection | ✓ | ✓ |
-| Keyboard shortcuts | ✓ | ✓ |
-| Side conversations | ✓ | ✓ (parent-child tickets) |
-| SLA timers | ✓ | ✓ |
-| **Automation** | | |
-| Triggers & automations | ✓ | ✓ |
-| Escalation rules | ✓ | ✓ |
-| Skills-based routing | ✓ | ✓ (Pro+) |
-| Round-robin assignment | ✓ | ✓ |
-| Capacity management | ✓ | ✓ (Enterprise) |
-| **Self-Service** | | |
-| Knowledge base | ✓ | ✓ |
-| Customer portal | ✓ | ✓ |
-| Guest tickets | ✓ | ✓ |
-| Community forums | ✓ (plugin) | ✓ |
-| **Channels** | | |
-| Email | ✓ | ✓ |
-| Live chat | ✓ (plugin) | ✓ (Freshchat, separate product) |
-| Phone | ✓ (plugin) | ✓ (Freshcaller, separate product) |
-| SMS | ✓ (plugin) | ✓ |
-| WhatsApp | ✓ (plugin) | ✓ (Growth+) |
-| Social media | ✓ (plugin) | ✓ |
-| Web widget | ✓ (plugin) | ✓ |
-| **AI & Intelligence** | | |
-| AI copilot | ✓ (plugin) | ✓ (Freddy AI, add-on) |
-| KB AI search | ✓ (plugin) | ✓ |
-| Sentiment analysis | ✓ (plugin) | ✓ (Pro+) |
-| Auto-categorization | ✓ (plugin) | ✓ (Freddy AI) |
-| **Analytics** | | |
-| Reports dashboard | ✓ | ✓ |
-| Agent metrics | ✓ | ✓ |
-| SLA reports | ✓ | ✓ |
-| CSAT | ✓ | ✓ |
-| NPS | ✓ (plugin) | ✓ (via Freshsurvey) |
-| Scheduled reports | ✓ (plugin) | ✓ (Pro+) |
-| **Admin & Security** | | |
-| Custom roles / RBAC | ✓ | ✓ (Enterprise) |
-| Audit log | ✓ | ✓ (Enterprise) |
-| SSO | ✓ | ✓ |
-| Two-factor auth | ✓ | ✓ |
-| IP restriction | ✓ (plugin) | ✓ (Estate/Enterprise) |
-| Data retention controls | ✓ | ✓ |
-| Sandbox environment | ✓ | ✓ (Enterprise) |
-| Compliance (HIPAA/SOC2) | ✓ (plugin) | ✓ (Enterprise) |
-| **Platform** | | |
-| Open source | ✓ | ✗ |
-| Self-hosted | ✓ | ✗ |
-| REST API | ✓ | ✓ |
-| Webhooks | ✓ | ✓ |
-| Custom objects | ✓ | ✓ (Pro+) |
-| Plugin / app system | ✓ | ✓ (Marketplace) |
-| Multi-framework | ✓ (Laravel, Rails, Django, AdonisJS, WordPress, Filament) | ✗ |
-| **Integrations** | | |
-| Jira | ✓ (plugin) | ✓ |
-| Slack | ✓ (plugin) | ✓ |
-| Import tools | Help Scout, Intercom importers | ✓ (various) |
-| **Mobile & Desktop** | | |
-| Mobile SDK (React Native) | ✓ | ✓ |
-| Mobile SDK (Flutter) | ✓ | ✗ |
-| Desktop app | ✓ | ✗ |
+| Dimension | Escalated | Freshdesk |
+|-----------|-----------|-----------|
+| Ticket conversations | Core package | Included in the support product |
+| Hosting and administration | Your host application and infrastructure | Vendor-managed service |
+| Core licence fees | No per-agent licence fees | Plan and usage terms apply |
+
+Freshdesk provides hosted ticketing, a shared inbox, and a customer portal. Its current plans include different routing, reporting, and AI allowances.
+
+Plugins have separate installation and provider requirements. Channel and AI integrations are not a promise of identical behavior on every backend. Hosting, email, storage, provider usage, and maintenance still cost money with Escalated. A compliance plugin does not certify a deployment as HIPAA-compliant or SOC 2-audited.
 
 ## Key differentiators
 
-- **Truly open source.** Escalated's source code is fully available. Freshdesk has a free tier, but it is closed-source SaaS with limited features on the free plan. Escalated gives you every feature from day one.
-
-- **Embeds into your application.** Escalated lives inside your existing codebase — same database, same authentication, same deployment. Freshdesk is a separate platform that requires customers and agents to work in Freshdesk's environment.
-
-- **Unified platform.** Freshdesk's phone, chat, and CRM features are separate Freshworks products (Freshcaller, Freshchat, Freshsales) with their own pricing. In Escalated, channels like live chat, phone, and SMS are plugins within a single system.
-
-- **No per-agent pricing at any tier.** Freshdesk's free plan is limited to 10 agents with basic features. Paid plans charge $15–$79+ per agent per month. Escalated is free for unlimited agents with full functionality.
+- **Open source and self-hosted.** Escalated core is MIT-licensed and can run on your own infrastructure.
+- **Embeds into your application.** Configure the backend adapter with your authentication, storage, and deployment. WordPress and Filament have native interfaces; the other supported web adapters use the shared Vue interface.
+- **No core per-agent pricing.** Agent count does not change the core licence fee. Compare operating costs and the features your team actually needs.
 
 ## Migrating from Freshdesk
 
-Escalated includes a dedicated **Freshdesk importer plugin** (`escalated-plugin-import-freshdesk`) that helps you migrate tickets, contacts, and other data from your Freshdesk account. See the [Importing Data](#importing) section for setup instructions.
+The separate MIT-licensed [`escalated-plugin-import-freshdesk`](https://github.com/escalated-dev/escalated-plugin-import-freshdesk) contains an importer. Test its mappings and API access with a small export before a full migration. See [Importing Data](/docs/importing).
 
 ## Pricing comparison
 
-| | Escalated | Freshdesk |
-|--|-----------|-----------|
-| Starting price | Free (open source) | Free (up to 10 agents, limited features) |
-| Mid-tier | Free | $49/agent/month (Pro) |
-| Full-featured | Free | $79/agent/month (Enterprise) |
-| AI features | Included (plugin) | $29+/agent/month (Freddy AI add-on) |
-| Per-agent fees | None | Yes, on all paid plans |
+The [Freshdesk pricing page](https://www.freshworks.com/freshdesk/pricing/) lists the following terms. Amounts, where shown, are USD before tax.
 
-Freshdesk's free tier is attractive for very small teams, but it lacks automation, collision detection, custom roles, and many other features available in paid plans. A 25-agent team on the Pro plan would pay approximately $1,225/month ($14,700/year). Escalated includes all features at no cost.
+| Plan | Published terms |
+|------|-----------------|
+| Growth | $19/agent/month, billed annually |
+| Pro | $55/agent/month, billed annually |
+| Enterprise | $89/agent/month, billed annually |
+
+A 25-agent team on Pro costs `25 × $55 = $1,375/month`, or `$16,500/year`, with annual billing before add-ons and tax.
+
+Freshdesk has a [Free Program](https://support.freshdesk.com/support/solutions/articles/50000010099-explore-freshdesk-free-program-freshdesk-only-) for two agents for six months. It is not an unlimited ten-agent free tier.
+
+*Prices and requirements as of November 2026.*

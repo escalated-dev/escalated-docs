@@ -1,5 +1,7 @@
 # Authorization
 
+The configuration keys, routes, gates, and commands shown here describe the Laravel adapter unless a framework is named. Use your adapter source for its corresponding API and defaults.
+
 Escalated uses two authorization gates to control access to agent and admin views. Define these in your application to control who can manage tickets.
 
 > **Note:** Escalated automatically shares `page.props.escalated` to all Inertia responses, containing the route prefix and the current user's agent/admin status.

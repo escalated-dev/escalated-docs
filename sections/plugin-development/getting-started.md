@@ -87,10 +87,13 @@ config: [
 
 ## Testing your plugin locally
 
-Install the runtime alongside the SDK:
+Build the runtime from source and install the local package in your development project. The runtime is not published on npm:
 
 ```bash
-npm install @escalated-dev/plugin-runtime
+git clone https://github.com/escalated-dev/escalated-plugin-runtime.git
+cd escalated-plugin-runtime
+npm ci
+npm run build
 ```
 
 Run your plugin against a local Escalated instance by pointing the bridge at your development directory. For Laravel:

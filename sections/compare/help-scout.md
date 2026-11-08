@@ -1,105 +1,41 @@
 # Escalated vs Help Scout
 
-Help Scout is an email-first customer support platform designed for small to mid-size teams that value simplicity. Escalated offers a comparable experience as an open-source, self-hosted solution that embeds directly into your existing application, with no per-user fees and a broader range of channels through its plugin system.
+Help Scout provides a hosted support platform. Escalated is an MIT-licensed support package installed inside your own application, without core per-agent licence fees.
 
 ## Feature comparison
 
-| Feature | Escalated | Help Scout |
-|---------|-----------|------------|
-| **Core Ticketing** | | |
-| Ticket management | ✓ | ✓ (conversations) |
-| Assignment & routing | ✓ | ✓ |
-| Ticket merging | ✓ | ✓ |
-| Ticket linking | ✓ | ✗ |
-| Bulk actions | ✓ | ✓ |
-| Custom statuses | ✓ | Limited (open/pending/closed) |
-| Custom fields | ✓ | ✓ |
-| Tags | ✓ | ✓ |
-| **Agent Tools** | | |
-| Macros | ✓ | ✓ (saved replies) |
-| Canned responses | ✓ | ✓ |
-| Collision detection | ✓ | ✓ |
-| Keyboard shortcuts | ✓ | ✓ |
-| Side conversations | ✓ | ✓ (notes, @mentions) |
-| SLA timers | ✓ | ✗ |
-| **Automation** | | |
-| Triggers & automations | ✓ | ✓ (workflows) |
-| Escalation rules | ✓ | Limited |
-| Skills-based routing | ✓ | ✗ |
-| Round-robin assignment | ✓ | ✓ |
-| Capacity management | ✓ | ✗ |
-| **Self-Service** | | |
-| Knowledge base | ✓ | ✓ (Docs) |
-| Customer portal | ✓ | ✗ |
-| Guest tickets | ✓ | ✗ |
-| Community forums | ✓ (plugin) | ✗ |
-| **Channels** | | |
-| Email | ✓ | ✓ |
-| Live chat | ✓ (plugin) | ✓ (Beacon) |
-| Phone | ✓ (plugin) | ✗ |
-| SMS | ✓ (plugin) | ✗ |
-| WhatsApp | ✓ (plugin) | ✗ |
-| Social media | ✓ (plugin) | ✓ (limited, via integrations) |
-| Web widget | ✓ (plugin) | ✓ (Beacon) |
-| **AI & Intelligence** | | |
-| AI copilot | ✓ (plugin) | ✓ (AI Drafts, Plus plan) |
-| KB AI search | ✓ (plugin) | ✓ (AI Answers) |
-| Sentiment analysis | ✓ (plugin) | ✗ |
-| Auto-categorization | ✓ (plugin) | ✗ |
-| **Analytics** | | |
-| Reports dashboard | ✓ | ✓ |
-| Agent metrics | ✓ | ✓ |
-| SLA reports | ✓ | ✗ |
-| CSAT | ✓ | ✓ |
-| NPS | ✓ (plugin) | ✗ |
-| Scheduled reports | ✓ (plugin) | ✗ |
-| **Admin & Security** | | |
-| Custom roles / RBAC | ✓ | Limited (predefined roles) |
-| Audit log | ✓ | ✗ |
-| SSO | ✓ | ✓ (Plus plan) |
-| Two-factor auth | ✓ | ✓ |
-| IP restriction | ✓ (plugin) | ✗ |
-| Data retention controls | ✓ | Limited |
-| Sandbox environment | ✓ | ✗ |
-| Compliance (HIPAA/SOC2) | ✓ (plugin) | ✓ (Plus plan, HIPAA add-on) |
-| **Platform** | | |
-| Open source | ✓ | ✗ |
-| Self-hosted | ✓ | ✗ |
-| REST API | ✓ | ✓ |
-| Webhooks | ✓ | ✓ |
-| Custom objects | ✓ | ✗ |
-| Plugin / app system | ✓ | ✓ (limited integrations) |
-| Multi-framework | ✓ (Laravel, Rails, Django, AdonisJS, WordPress, Filament) | ✗ |
-| **Integrations** | | |
-| Jira | ✓ (plugin) | ✓ |
-| Slack | ✓ (plugin) | ✓ |
-| Import tools | Freshdesk, Intercom importers | ✗ |
-| **Mobile & Desktop** | | |
-| Mobile SDK (React Native) | ✓ | ✗ |
-| Mobile SDK (Flutter) | ✓ | ✗ |
-| Desktop app | ✓ | ✗ |
+| Dimension | Escalated | Help Scout |
+|-----------|-----------|-----------|
+| Ticket conversations | Core package | Included in the support product |
+| Hosting and administration | Your host application and infrastructure | Vendor-managed service |
+| Core licence fees | No per-agent licence fees | Plan and usage terms apply |
+
+Help Scout provides inboxes, saved replies, and knowledge bases. Standard includes a basic SLA policy; Plus adds a customer portal and round-robin routing. Pro includes SSO/SAML.
+
+Plugins have separate installation and provider requirements. Channel and AI integrations are not a promise of identical behavior on every backend. Hosting, email, storage, provider usage, and maintenance still cost money with Escalated. A compliance plugin does not certify a deployment as HIPAA-compliant or SOC 2-audited.
 
 ## Key differentiators
 
-- **Open source and self-hosted.** Escalated gives you full access to the source code and runs on your servers. Help Scout is closed-source SaaS with no self-hosted option, meaning your customer data always lives on Help Scout's infrastructure.
-
-- **More channels out of the box.** Help Scout is primarily email and chat (Beacon). Escalated's plugin system adds phone, SMS, WhatsApp, and social media channels, giving you a true omnichannel helpdesk.
-
-- **Deeper customization.** Escalated supports custom statuses, custom objects, SLAs with escalation rules, skills-based routing, and capacity management — areas where Help Scout has limited or no coverage. Help Scout intentionally keeps things simple, which works for some teams but can be limiting as you scale.
-
-- **No per-user pricing.** Help Scout charges $50–$75+ per user per month. Escalated is free for unlimited agents.
+- **Open source and self-hosted.** Escalated core is MIT-licensed and can run on your own infrastructure.
+- **Embeds into your application.** Configure the backend adapter with your authentication, storage, and deployment. WordPress and Filament have native interfaces; the other supported web adapters use the shared Vue interface.
+- **No core per-agent pricing.** Agent count does not change the core licence fee. Compare operating costs and the features your team actually needs.
 
 ## Migrating from Help Scout
 
-Escalated includes a dedicated **Help Scout importer plugin** (`escalated-plugin-import-helpscout`) that helps you migrate conversations, customers, and mailbox data from your Help Scout account. See the [Importing Data](#importing) section for setup instructions.
+The separate MIT-licensed [`escalated-plugin-import-helpscout`](https://github.com/escalated-dev/escalated-plugin-import-helpscout) contains an importer. Test its mappings and API access with a small export before a full migration. See [Importing Data](/docs/importing).
 
 ## Pricing comparison
 
-| | Escalated | Help Scout |
-|--|-----------|------------|
-| Starting price | Free (open source) | $50/user/month (Standard) |
-| Mid-tier | Free | $75/user/month (Plus) |
-| Per-user fees | None | Yes, all plans |
-| AI features | Included (plugin) | Included on Plus plan |
+The [Help Scout pricing page](https://www.helpscout.com/pricing/) lists the following terms. Amounts, where shown, are USD before tax.
 
-Help Scout's pricing is straightforward but adds up quickly with team growth. A 20-agent team on the Standard plan costs $1,000/month ($12,000/year). Escalated provides more features — including SLAs, custom roles, audit logs, and additional channels — at no licensing cost.
+| Plan | Published terms |
+|------|-----------------|
+| Standard | $25/user/month at the displayed per-user rate |
+| Plus | $45/user/month at the displayed per-user rate |
+| Pro | $75/user/month at the displayed per-user rate |
+
+A 20-user team on Standard costs `20 × $25 = $500/month`, or `$6,000/year`, at that displayed rate before add-ons and tax.
+
+The Free plan lists five users, one inbox, and one Docs site. AI resolution charges are separate from user pricing.
+
+*Prices and requirements as of November 2026.*

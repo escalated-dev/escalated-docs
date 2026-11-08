@@ -1,6 +1,6 @@
 # Getting Started
 
-Escalated is an open-source, embeddable support ticket system with a shared Inertia.js UI. Install the backend adapter for your framework, add the npm package for the frontend, and you're ready to go.
+Escalated is an open-source, embeddable support ticket system with a shared Inertia Vue interface for most web adapters and native interfaces for WordPress and Filament. Install your backend adapter, configure host authentication and authorization, and follow its frontend and scheduler setup instructions.
 
 > **Headless mode** -- Escalated can also run without the built-in UI, providing only the backend API, events, and commands. See [Configuration](configuration.md) for details.
 

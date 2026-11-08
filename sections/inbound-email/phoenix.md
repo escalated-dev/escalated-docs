@@ -54,7 +54,7 @@ Add a custom header `x-escalated-inbound-secret: <your secret>`.
 https://yourapp.com/support/webhook/email/inbound?adapter=mailgun
 ```
 
-Set the HMAC header the same way.
+Have your trusted forwarding service attach the configured shared-secret header.
 
 ### Testing
 

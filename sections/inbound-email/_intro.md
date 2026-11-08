@@ -6,7 +6,7 @@ Create and reply to tickets directly from incoming emails. Escalated supports **
 
 1. Your email provider receives a message at your support address (e.g., `support@yourapp.com`).
 2. The provider forwards it to your app via webhook.
-3. Escalated normalizes the payload and resolves the message to an existing ticket using, in order: canonical `Message-ID` headers (`<ticket-{id}@{domain}>`), signed `Reply-To` verification (`reply+{id}.{hmac8}@{domain}`), and subject-reference tags (`[ESC-00001]`).
+3. When an inbound secret is configured, only a valid signed `Reply-To` address can identify a ticket. Without a secret, the compatibility chain also considers canonical `In-Reply-To` and `References` headers, subject references, and historical inbound message IDs. A match becomes a reply only if the sender is the ticket requester; it is posted as that requester. Other senders, including agents replying by email, create a new ticket.
 4. Matched emails add a reply; unmatched emails create a new ticket (or are skipped if they're noise — SNS subscription confirmations, empty body+subject).
 
 ## Webhook model
@@ -25,11 +25,11 @@ The legacy host-app integrations (Laravel, Rails, Django, Adonis, Filament, Word
 
 ## Authentication
 
-Webhooks are guarded by a shared secret. Your provider forwards it as `X-Escalated-Inbound-Secret`; the framework verifies it with a timing-safe comparison. The same secret is used to sign outbound `Reply-To` addresses (`reply+{id}.{hmac8}@{domain}`), so forged emails targeting a stolen reply address are rejected.
+Webhooks are guarded by a shared secret. Your provider forwards it as `X-Escalated-Inbound-Secret`; the framework verifies it with a timing-safe comparison. The same secret is used to sign outbound `Reply-To` addresses (`reply+{id}.{hmac8}@{domain}`), so the receiver can distinguish an authorized webhook request from an unauthenticated request. The signed reply address identifies a thread; it does not authenticate the sender. Configure SPF, DKIM, and DMARC enforcement at your inbound provider.
 
 ## Features
 
-- **Thread detection** via canonical `Message-ID` / `In-Reply-To` / `References` headers, signed `Reply-To` verification, and subject-reference tags.
+- **Thread detection** uses signed `Reply-To` addresses when an inbound secret is set. Header and subject matching are compatibility fallbacks only when no secret is configured.
 - **Signed Reply-To addresses** — outbound email embeds an HMAC so replies that strip threading headers still find the right ticket, and forged addresses are rejected.
 - **Guest tickets** for unknown senders with auto-derived display names.
 - **Noise filtering** — SNS subscription confirmations and empty body+subject messages are skipped rather than creating a ticket.

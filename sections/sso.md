@@ -87,7 +87,7 @@ Both SAML and JWT support custom attribute mapping:
 
 ## Framework Support
 
-SSO is available across all backends:
+The following adapters expose SSO services or settings. Algorithm support and validation behavior must be checked in the installed adapter; the examples above are not a cross-backend security contract:
 
 | Framework | Service | Location |
 |-----------|---------|----------|

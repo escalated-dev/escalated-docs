@@ -31,7 +31,7 @@ The `inbound-secret` is symmetric — it signs outbound `Reply-To` addresses *an
 
 ### Provider setup
 
-Each provider signs its webhook and expects you to forward that signature via the `X-Escalated-Inbound-Secret` header.
+The receiver compares `X-Escalated-Inbound-Secret` with the configured shared secret. This header carries the shared value, not a provider signature or a payload HMAC. Use HTTPS and a trusted forwarding service if your provider cannot attach the header.
 
 **Postmark** — in your server settings under *Inbound → Webhook URL*:
 
@@ -47,7 +47,7 @@ Add a custom header `X-Escalated-Inbound-Secret: <your secret>`.
 https://yourapp.com/escalated/webhook/email/inbound?adapter=mailgun
 ```
 
-Set the HMAC header the same way.
+Have your trusted forwarding service attach the configured shared-secret header.
 
 ### Testing
 

@@ -10,10 +10,10 @@ Every ticket has a **type** that describes the nature of the request. Set the ty
 
 - **Question** -- The requester is asking for information. No underlying fault exists.
 - **Problem** -- Something is broken or not working as expected. Problems can have many linked incidents.
-- **Incident** -- A single occurrence of a known problem. Link incidents to a parent problem to resolve them together.
+- **Incident** -- A single occurrence of a known problem. Link related tickets to preserve context. Linking tickets does not itself guarantee that resolving one resolves the others.
 - **Task** -- An internal to-do item that may or may not originate from a customer request.
 
-Ticket type is available as a condition in automations, macros, and SLA policies.
+Macros are manual action bundles and have no conditions. Configure ticket conditions in the appropriate admin automation or workflow surface.
 
 ## Searching tickets
 

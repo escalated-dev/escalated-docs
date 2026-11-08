@@ -1,106 +1,39 @@
 # Escalated vs Zendesk
 
-Zendesk is one of the most widely used customer support platforms, offering a broad suite of tools for ticketing, live chat, phone, and self-service. Escalated provides a comparable feature set as an open-source, self-hosted solution that embeds directly into your existing application — without per-agent pricing.
+Zendesk provides a hosted support platform. Escalated is an MIT-licensed support package installed inside your own application, without core per-agent licence fees.
 
 ## Feature comparison
 
-| Feature | Escalated | Zendesk |
-|---------|-----------|---------|
-| **Core Ticketing** | | |
-| Ticket management | ✓ | ✓ |
-| Assignment & routing | ✓ | ✓ |
-| Ticket merging | ✓ | ✓ |
-| Ticket linking | ✓ | ✓ |
-| Bulk actions | ✓ | ✓ |
-| Custom statuses | ✓ | ✓ |
-| Custom fields | ✓ | ✓ |
-| Tags | ✓ | ✓ |
-| **Agent Tools** | | |
-| Macros | ✓ | ✓ |
-| Canned responses | ✓ | ✓ |
-| Collision detection | ✓ | ✓ |
-| Keyboard shortcuts | ✓ | ✓ |
-| Side conversations | ✓ | ✓ (add-on on some plans) |
-| SLA timers | ✓ | ✓ |
-| **Automation** | | |
-| Triggers & automations | ✓ | ✓ |
-| Escalation rules | ✓ | ✓ |
-| Skills-based routing | ✓ | ✓ (Professional+) |
-| Round-robin assignment | ✓ | ✓ (Professional+) |
-| Capacity management | ✓ | ✓ (Professional+) |
-| **Self-Service** | | |
-| Knowledge base | ✓ | ✓ (Guide) |
-| Customer portal | ✓ | ✓ |
-| Guest tickets | ✓ | ✓ |
-| Community forums | ✓ (plugin) | ✓ (Guide Professional) |
-| **Channels** | | |
-| Email | ✓ | ✓ |
-| Live chat | ✓ (plugin) | ✓ |
-| Phone | ✓ (plugin) | ✓ (Talk) |
-| SMS | ✓ (plugin) | ✓ |
-| WhatsApp | ✓ (plugin) | ✓ |
-| Social media | ✓ (plugin) | ✓ |
-| Web widget | ✓ (plugin) | ✓ |
-| **AI & Intelligence** | | |
-| AI copilot | ✓ (plugin) | ✓ (add-on) |
-| KB AI search | ✓ (plugin) | ✓ |
-| Sentiment analysis | ✓ (plugin) | ✓ |
-| Auto-categorization | ✓ (plugin) | ✓ |
-| **Analytics** | | |
-| Reports dashboard | ✓ | ✓ (Explore) |
-| Agent metrics | ✓ | ✓ |
-| SLA reports | ✓ | ✓ |
-| CSAT | ✓ | ✓ |
-| NPS | ✓ (plugin) | ✓ |
-| Scheduled reports | ✓ (plugin) | ✓ (Explore Professional) |
-| **Admin & Security** | | |
-| Custom roles / RBAC | ✓ | ✓ (Enterprise) |
-| Audit log | ✓ | ✓ (Enterprise) |
-| SSO | ✓ | ✓ |
-| Two-factor auth | ✓ | ✓ |
-| IP restriction | ✓ (plugin) | ✓ |
-| Data retention controls | ✓ | ✓ |
-| Sandbox environment | ✓ | ✓ (Enterprise) |
-| Compliance (HIPAA/SOC2) | ✓ (plugin) | ✓ (Enterprise add-on) |
-| **Platform** | | |
-| Open source | ✓ | ✗ |
-| Self-hosted | ✓ | ✗ |
-| REST API | ✓ | ✓ |
-| Webhooks | ✓ | ✓ |
-| Custom objects | ✓ | ✓ (Sunshine) |
-| Plugin / app system | ✓ | ✓ (Marketplace) |
-| Multi-framework | ✓ (Laravel, Rails, Django, AdonisJS, WordPress, Filament) | ✗ |
-| **Integrations** | | |
-| Jira | ✓ (plugin) | ✓ |
-| Slack | ✓ (plugin) | ✓ |
-| Import tools | Freshdesk, Help Scout, Intercom importers | ✓ (various) |
-| **Mobile & Desktop** | | |
-| Mobile SDK (React Native) | ✓ | ✓ |
-| Mobile SDK (Flutter) | ✓ | ✗ |
-| Desktop app | ✓ | ✗ |
+| Dimension | Escalated | Zendesk |
+|-----------|-----------|-----------|
+| Ticket conversations | Core package | Included in the support product |
+| Hosting and administration | Your host application and infrastructure | Vendor-managed service |
+| Core licence fees | No per-agent licence fees | Plan and usage terms apply |
+
+Zendesk provides customer service ticketing with messaging, voice, and self-service options. Its Suite and Support products have different plan scopes.
+
+Plugins have separate installation and provider requirements. Channel and AI integrations are not a promise of identical behavior on every backend. Hosting, email, storage, provider usage, and maintenance still cost money with Escalated. A compliance plugin does not certify a deployment as HIPAA-compliant or SOC 2-audited.
 
 ## Key differentiators
 
-- **Open source and self-hosted.** Escalated runs on your infrastructure. You have full access to the source code, complete control over your data, and no vendor lock-in. Zendesk is a closed-source SaaS product where all data lives on their servers.
-
-- **Embeds into your application.** Escalated installs as a package in your existing codebase and shares your app's authentication, database, and UI. With Zendesk, agents and customers work in a separate Zendesk-hosted environment.
-
-- **No per-agent pricing.** Zendesk charges $19 to $115+ per agent per month depending on the plan, with many features locked behind higher tiers or add-ons. Escalated is free for unlimited agents.
-
-- **Multi-framework support.** Escalated has native adapters for Laravel, Rails, Django, AdonisJS, WordPress, and Filament. Zendesk is a standalone platform that connects to your app only through APIs and widgets.
+- **Open source and self-hosted.** Escalated core is MIT-licensed and can run on your own infrastructure.
+- **Embeds into your application.** Configure the backend adapter with your authentication, storage, and deployment. WordPress and Filament have native interfaces; the other supported web adapters use the shared Vue interface.
+- **No core per-agent pricing.** Agent count does not change the core licence fee. Compare operating costs and the features your team actually needs.
 
 ## Migrating from Zendesk
 
-Escalated does not currently include a dedicated Zendesk importer plugin, but the importing system supports building custom import adapters. The existing Freshdesk, Help Scout, and Intercom importer plugins provide a pattern you can follow to create a Zendesk import pipeline. Check the [Importing Data](#importing) section for details.
+The separate MIT-licensed [`escalated-plugin-import-zendesk`](https://github.com/escalated-dev/escalated-plugin-import-zendesk) contains an importer. Test its mappings and API access with a small export before a full migration. See [Importing Data](/docs/importing).
 
 ## Pricing comparison
 
-| | Escalated | Zendesk |
-|--|-----------|---------|
-| Starting price | Free (open source) | $19/agent/month (Support Team) |
-| Mid-tier | Free | $55/agent/month (Support Professional) |
-| Full-featured | Free | $115/agent/month (Support Enterprise) |
-| AI add-on | Included (plugin) | $50/agent/month (Advanced AI add-on) |
-| Per-agent fees | None | Yes, all plans |
+The [Zendesk pricing page](https://www.zendesk.com/pricing/) lists the following terms. Amounts, where shown, are USD before tax.
 
-Zendesk's per-agent pricing means costs scale linearly with team size. A 50-agent team on the Professional plan pays approximately $2,750/month ($33,000/year) before add-ons. Escalated has no licensing costs — you only pay for your own hosting infrastructure.
+| Plan | Published terms |
+|------|-----------------|
+| Published plan prices | Use the vendor pricing page for the current plan and currency |
+
+Budget for the selected subscription, usage charges, migration, and administration. A Suite price must not be labeled as a Support plan price.
+
+The pricing page varies by region and currency. Choose the currency and billing period for your organization before comparing costs.
+
+*Prices and requirements as of November 2026.*
